@@ -1,0 +1,18 @@
+{
+  "name": "comba",
+  "version": "0.0.1",
+  "description": "...",
+  "main": "lib/Comba.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexkulagin/comba.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexkulagin/comba/issues"
+  },
+  "homepage": "https://github.com/alexkulagin/comba#readme",
+  "devDependencies": {},
+  "author": "alexkulagin.com",
+  "license": "MIT",
+  "scripts": {}
+}

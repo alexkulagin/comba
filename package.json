@@ -1,6 +1,6 @@
 {
   "name": "comba",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "...",
   "main": "lib/Comba.js",
   "repository": {
@@ -11,8 +11,13 @@
     "url": "https://github.com/alexkulagin/comba/issues"
   },
   "homepage": "https://github.com/alexkulagin/comba#readme",
-  "devDependencies": {},
   "author": "alexkulagin.com",
   "license": "MIT",
-  "scripts": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }

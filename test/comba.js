@@ -40,7 +40,7 @@
 	//┘
 
 		const T = (str) => chalk.bold.hex('#11CE80')(str);
-		const H = (str) => chalk.bold.hex('#E22C52')(str);
+		const H = (str) => chalk.bold.hex('#489844')(str);
 
 
 
@@ -82,15 +82,26 @@
 		{
 			describe('', () =>
 			{
-				it('(a, b, c).run()', (done) =>
+				it('[sync] series(a1, b1, c1).run()', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
-					series(ƒ('a'), ƒ('b'), ƒ('c')).run();
+					series(ƒ('a1'), ƒ('b1'), ƒ('c1')).run();
 
-					expect(list).to.be.equalTo(['a', 'b', 'c']);
+					expect(list).to.be.equalTo(['a1', 'b1', 'c1']);
 
 					done();
+				});
+
+				it('[sync] series(a2, b2, c2).run(complete)', (done) =>
+				{
+					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+
+					series(ƒ('a2'), ƒ('b2'), ƒ('c2')).run(() =>
+					{
+						expect(list).to.be.equalTo(['a2', 'b2', 'c2']);
+						done();
+					});
 				});
 			});
 		});

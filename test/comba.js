@@ -11,11 +11,27 @@
 	//┘
 
 
+		// NODE
+		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
+			const chalk = require('chalk');
+			const { expect } = require('chai');
+
+
 		// MODULES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { expect } = require('chai');
 			const { series, parallel } = require('../lib/Comba');
+
+
+
+	//┐  STYLING WRAPPERS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+
+		const T = (str) => chalk.bold.hex('#11CE80')(str);
+		const H = (str) => chalk.bold.hex('#E22C52')(str);
 
 
 
@@ -25,9 +41,9 @@
 //┘
 
 
-	describe('COMBA TEST:\n', () =>
+	describe(T('COMBA TEST\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n\n'), () =>
 	{
-		describe('interfaces:', () =>
+		describe(H('interfaces:'), () =>
 		{
 			describe('', () =>
 			{
@@ -48,6 +64,7 @@
 			describe('', () =>
 			{
 				it('series instance not equal parallel instance', () => expect(series()).to.not.equal(parallel()));
+				it('series constructor equal parallel constructor', () => expect(series().constructor).to.equal(parallel().constructor));
 			});
 		});
 	});

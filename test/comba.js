@@ -76,4 +76,22 @@
 				it('series constructor equal parallel constructor', () => expect(series().constructor).to.equal(parallel().constructor));
 			});
 		});
+
+
+		describe(H('\n\nSERIES EXECUTION:'), () =>
+		{
+			describe('', () =>
+			{
+				it('(a, b, c).run()', (done) =>
+				{
+					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+
+					series(ƒ('a'), ƒ('b'), ƒ('c')).run();
+
+					expect(list).to.be.equalTo(['a', 'b', 'c']);
+
+					done();
+				});
+			});
+		});
 	});

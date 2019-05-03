@@ -1,6 +1,6 @@
 {
   "name": "comba",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "...",
   "main": "lib/Comba.js",
   "repository": {
@@ -18,6 +18,6 @@
     "mocha": "^6.1.4"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter spec"
   }
 }

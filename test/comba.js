@@ -182,7 +182,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(1).run(() =>
+					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(1).run(() =>
 					{
 						expect(l).to.be.equalTo(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
 						done();
@@ -193,7 +193,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(2).run(() =>
+					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(2).run(() =>
 					{
 						expect(l).to.be.equalTo(['p2', 'p3', 'p1', 'p5', 'p6', 'p4']);
 						done();
@@ -204,7 +204,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(3).run(() =>
+					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(3).run(() =>
 					{
 						expect(l).to.be.equalTo(['p3', 'p2', 'p5', 'p6', 'p4', 'p1']);
 						done();
@@ -215,7 +215,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(4).run(() =>
+					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(4).run(() =>
 					{
 						expect(l).to.be.equalTo(['p3', 'p5', 'p6', 'p2', 'p4', 'p1']);
 						done();

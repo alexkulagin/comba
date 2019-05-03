@@ -211,6 +211,17 @@
 					});
 				});
 
+				it('[sync & async] parallel(p1, p2, p3, p4, p5, p6).limit(4).run(complete)  ≡  [p3, p5, p6, p2, p4, p1]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(4).run(() =>
+					{
+						expect(l).to.be.equalTo(['p3', 'p5', 'p6', 'p2', 'p4', 'p1']);
+						done();
+					});
+				});
+
 			});
 		});
 

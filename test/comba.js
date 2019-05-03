@@ -144,6 +144,17 @@
 						done();
 					});
 				});
+
+				it('[async] parallel(p1, p2, p3).run(complete)  ≡  [p2, p3, p1]', (done) =>
+				{
+					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
+
+					parallel(ƒ('p1', 300), ƒ('p2', 200), ƒ('p3', 250)).run(() =>
+					{
+						expect(list).to.be.equalTo(['p2', 'p3', 'p1']);
+						done();
+					});
+				});
 			});
 		});
 

@@ -173,4 +173,24 @@
 			});
 		});
 
+
+		describe(H('\n\nPARALLEL EXECUTION (LIMITED):'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] parallel(p1, p2, p3, p4, p5, p6).limit(1).run(complete)  ≡  [p1, p2, p3, p4, p5, p6]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1', 800), ƒ(l, 'p2', 400), ƒ(l, 'p3'), ƒ(l, 'p4', 600), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(1).run(() =>
+					{
+						expect(l).to.be.equalTo(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
+						done();
+					});
+
+				});
+
+			});
+		});
+
 	});

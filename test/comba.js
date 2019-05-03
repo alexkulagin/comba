@@ -52,6 +52,7 @@
 
 	describe(T('COMBA TEST\n░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░'), () =>
 	{
+
 		describe(H('\n\nINTERFACES:'), () =>
 		{
 			describe('', () =>
@@ -82,38 +83,57 @@
 		{
 			describe('', () =>
 			{
-				it('[sync] series(a1, b1, c1).run()', (done) =>
+				it('[sync] series(s1, s2, s3).run()', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
-					series(ƒ('a1'), ƒ('b1'), ƒ('c1')).run();
+					series(ƒ('s1'), ƒ('s2'), ƒ('s3')).run();
 
-					expect(list).to.be.equalTo(['a1', 'b1', 'c1']);
+					expect(list).to.be.equalTo(['s1', 's2', 's3']);
 
 					done();
 				});
 
-				it('[sync] series(a2, b2, c2).run(complete)', (done) =>
+				it('[sync] series(s1, s2, s3).run(complete)', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
-					series(ƒ('a2'), ƒ('b2'), ƒ('c2')).run(() =>
+					series(ƒ('s1'), ƒ('s2'), ƒ('s3')).run(() =>
 					{
-						expect(list).to.be.equalTo(['a2', 'b2', 'c2']);
+						expect(list).to.be.equalTo(['s1', 's2', 's3']);
 						done();
 					});
 				});
 
-				it('[async] series(a3, b3, c3).run(complete)', (done) =>
+				it('[async] series(s1, s2, s3).run(complete)', (done) =>
 				{
 					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
 
-					series(ƒ('a3', 200), ƒ('b3', 100), ƒ('c3', 300)).run(() =>
+					series(ƒ('s1', 200), ƒ('s2', 100), ƒ('s3', 300)).run(() =>
 					{
-						expect(list).to.be.equalTo(['a3', 'b3', 'c3']);
+						expect(list).to.be.equalTo(['s1', 's2', 's3']);
 						done();
 					});
 				});
 			});
 		});
+
+
+		describe(H('\n\nPARALLEL EXECUTION:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync] parallel(p1, p2, p3).run()', (done) =>
+				{
+					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+
+					parallel(ƒ('p1'), ƒ('p2'), ƒ('p3')).run();
+
+					expect(list).to.be.equalTo(['p1', 'p2', 'p3']);
+
+					done();
+				});
+			});
+		});
+
 	});

@@ -83,7 +83,7 @@
 		{
 			describe('', () =>
 			{
-				it('[sync] series(s1, s2, s3).run()', (done) =>
+				it('[sync] series(s1, s2, s3).run()  ≡  [s1, s2, s3]', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
@@ -94,7 +94,7 @@
 					done();
 				});
 
-				it('[sync] series(s1, s2, s3).run(complete)', (done) =>
+				it('[sync] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
@@ -105,7 +105,7 @@
 					});
 				});
 
-				it('[async] series(s1, s2, s3).run(complete)', (done) =>
+				it('[async] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
 					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
 
@@ -123,7 +123,7 @@
 		{
 			describe('', () =>
 			{
-				it('[sync] parallel(p1, p2, p3).run()', (done) =>
+				it('[sync] parallel(p1, p2, p3).run()  ≡  [p1, p2, p3]', (done) =>
 				{
 					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
 
@@ -132,6 +132,17 @@
 					expect(list).to.be.equalTo(['p1', 'p2', 'p3']);
 
 					done();
+				});
+
+				it('[sync] parallel(p1, p2, p3).run(complete)  ≡  [p1, p2, p3]', (done) =>
+				{
+					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+
+					parallel(ƒ('p1'), ƒ('p2'), ƒ('p3')).run(() =>
+					{
+						expect(list).to.be.equalTo(['p1', 'p2', 'p3']);
+						done();
+					});
 				});
 			});
 		});

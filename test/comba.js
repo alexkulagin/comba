@@ -44,6 +44,21 @@
 
 
 
+	//┐  TASKS (SYNC & ASYNC)
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		const ƒ = (list, n, t) => (done) =>
+		{
+			if (t !== undefined) {
+				setTimeout(() => { list.push(n), done(); }, t);
+			}
+
+			else list.push(n), done();
+		};
+
+
+
 
 //┐  TESTS
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -85,33 +100,33 @@
 			{
 				it('[sync] series(s1, s2, s3).run()  ≡  [s1, s2, s3]', (done) =>
 				{
-					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+					const l = [];
 
-					series(ƒ('s1'), ƒ('s2'), ƒ('s3')).run();
+					series(ƒ(l, 's1'), ƒ(l, 's2'), ƒ(l, 's3')).run();
 
-					expect(list).to.be.equalTo(['s1', 's2', 's3']);
+					expect(l).to.be.equalTo(['s1', 's2', 's3']);
 
 					done();
 				});
 
 				it('[sync] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
-					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+					const l = [];
 
-					series(ƒ('s1'), ƒ('s2'), ƒ('s3')).run(() =>
+					series(ƒ(l, 's1'), ƒ(l, 's2'), ƒ(l, 's3')).run(() =>
 					{
-						expect(list).to.be.equalTo(['s1', 's2', 's3']);
+						expect(l).to.be.equalTo(['s1', 's2', 's3']);
 						done();
 					});
 				});
 
 				it('[async] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
-					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
+					const l = [];
 
-					series(ƒ('s1', 200), ƒ('s2', 100), ƒ('s3', 300)).run(() =>
+					series(ƒ(l, 's1', 200), ƒ(l, 's2', 100), ƒ(l, 's3', 300)).run(() =>
 					{
-						expect(list).to.be.equalTo(['s1', 's2', 's3']);
+						expect(l).to.be.equalTo(['s1', 's2', 's3']);
 						done();
 					});
 				});
@@ -125,33 +140,33 @@
 			{
 				it('[sync] parallel(p1, p2, p3).run()  ≡  [p1, p2, p3]', (done) =>
 				{
-					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+					const l = [];
 
-					parallel(ƒ('p1'), ƒ('p2'), ƒ('p3')).run();
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2'), ƒ(l, 'p3')).run();
 
-					expect(list).to.be.equalTo(['p1', 'p2', 'p3']);
+					expect(l).to.be.equalTo(['p1', 'p2', 'p3']);
 
 					done();
 				});
 
 				it('[sync] parallel(p1, p2, p3).run(complete)  ≡  [p1, p2, p3]', (done) =>
 				{
-					const list = [], ƒ = (n) => (ok) => { list.push(n); ok() };
+					const l = [];
 
-					parallel(ƒ('p1'), ƒ('p2'), ƒ('p3')).run(() =>
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2'), ƒ(l, 'p3')).run(() =>
 					{
-						expect(list).to.be.equalTo(['p1', 'p2', 'p3']);
+						expect(l).to.be.equalTo(['p1', 'p2', 'p3']);
 						done();
 					});
 				});
 
 				it('[async] parallel(p1, p2, p3).run(complete)  ≡  [p2, p3, p1]', (done) =>
 				{
-					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
+					const l = [];
 
-					parallel(ƒ('p1', 300), ƒ('p2', 200), ƒ('p3', 250)).run(() =>
+					parallel(ƒ(l, 'p1', 300), ƒ(l, 'p2', 200), ƒ(l, 'p3', 250)).run(() =>
 					{
-						expect(list).to.be.equalTo(['p2', 'p3', 'p1']);
+						expect(l).to.be.equalTo(['p2', 'p3', 'p1']);
 						done();
 					});
 				});

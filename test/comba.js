@@ -103,6 +103,17 @@
 						done();
 					});
 				});
+
+				it('[async] series(a3, b3, c3).run(complete)', (done) =>
+				{
+					const list = [], ƒ = (n, t) => (ok) => setTimeout(() => { list.push(n); ok() }, t);
+
+					series(ƒ('a3', 200), ƒ('b3', 100), ƒ('c3', 300)).run(() =>
+					{
+						expect(list).to.be.equalTo(['a3', 'b3', 'c3']);
+						done();
+					});
+				});
 			});
 		});
 	});

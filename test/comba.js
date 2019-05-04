@@ -225,4 +225,34 @@
 			});
 		});
 
+
+		describe(H('\n\nDELAED EXECUTION:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] series(s1, s2).delay(500).run()', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2', 200)).delay(500).run();
+
+					expect(l.length).to.equal(0);
+					setTimeout(() => ( expect(l.length).to.equal(1) ), 550);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 750);
+				});
+
+				it('[sync & async] parallel(p1, p2).delay(500).run()', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2', 200)).delay(500).run();
+
+					expect(l.length).to.equal(0);
+					setTimeout(() => ( expect(l.length).to.equal(1) ), 550);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 750);
+				});
+
+			});
+		});
+
 	});

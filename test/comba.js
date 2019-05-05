@@ -124,7 +124,7 @@
 				{
 					const l = [];
 
-					series(ƒ(l, 's1', 200), ƒ(l, 's2', 100), ƒ(l, 's3', 300)).run(() =>
+					series(ƒ(l, 's1', 100), ƒ(l, 's2', 50), ƒ(l, 's3', 150)).run(() =>
 					{
 						expect(l).to.be.equalTo(['s1', 's2', 's3']);
 						done();
@@ -164,7 +164,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 300), ƒ(l, 'p2', 200), ƒ(l, 'p3', 250)).run(() =>
+					parallel(ƒ(l, 'p1', 75), ƒ(l, 'p2', 50), ƒ(l, 'p3', 60)).run(() =>
 					{
 						expect(l).to.be.equalTo(['p2', 'p3', 'p1']);
 						done();
@@ -182,7 +182,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(1).run(() =>
+					parallel(ƒ(l, 'p1', 100), ƒ(l, 'p2', 50), ƒ(l, 'p3'), ƒ(l, 'p4', 75), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(1).run(() =>
 					{
 						expect(l).to.be.equalTo(['p1', 'p2', 'p3', 'p4', 'p5', 'p6']);
 						done();
@@ -193,7 +193,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(2).run(() =>
+					parallel(ƒ(l, 'p1', 100), ƒ(l, 'p2', 50), ƒ(l, 'p3'), ƒ(l, 'p4', 75), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(2).run(() =>
 					{
 						expect(l).to.be.equalTo(['p2', 'p3', 'p1', 'p5', 'p6', 'p4']);
 						done();
@@ -204,7 +204,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(3).run(() =>
+					parallel(ƒ(l, 'p1', 100), ƒ(l, 'p2', 50), ƒ(l, 'p3'), ƒ(l, 'p4', 75), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(3).run(() =>
 					{
 						expect(l).to.be.equalTo(['p3', 'p2', 'p5', 'p6', 'p4', 'p1']);
 						done();
@@ -215,7 +215,7 @@
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1', 400), ƒ(l, 'p2', 200), ƒ(l, 'p3'), ƒ(l, 'p4', 300), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(4).run(() =>
+					parallel(ƒ(l, 'p1', 100), ƒ(l, 'p2', 50), ƒ(l, 'p3'), ƒ(l, 'p4', 75), ƒ(l, 'p5'), ƒ(l, 'p6')).limit(4).run(() =>
 					{
 						expect(l).to.be.equalTo(['p3', 'p5', 'p6', 'p2', 'p4', 'p1']);
 						done();
@@ -230,26 +230,56 @@
 		{
 			describe('', () =>
 			{
-				it('[sync & async] series(s1, s2).delay(500).run()', (done) =>
+				it('[sync & async] series(s1, s2).delay(100).run()', (done) =>
 				{
 					const l = [];
 
-					series(ƒ(l, 's1'), ƒ(l, 's2', 200)).delay(500).run();
+					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).delay(100).run();
 
 					expect(l.length).to.equal(0);
-					setTimeout(() => ( expect(l.length).to.equal(1) ), 550);
-					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 750);
+					setTimeout(() => ( expect(l.length).to.equal(1) ), 125);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 175);
 				});
 
-				it('[sync & async] parallel(p1, p2).delay(500).run()', (done) =>
+				it('[sync & async] parallel(p1, p2).delay(100).run()', (done) =>
 				{
 					const l = [];
 
-					parallel(ƒ(l, 'p1'), ƒ(l, 'p2', 200)).delay(500).run();
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2', 50)).delay(100).run();
 
 					expect(l.length).to.equal(0);
-					setTimeout(() => ( expect(l.length).to.equal(1) ), 550);
-					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 750);
+					setTimeout(() => ( expect(l.length).to.equal(1) ), 125);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 175);
+				});
+
+			});
+		});
+
+
+		describe(H('\n\nPREPEND & APPEND:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] series(s1, s2).append(s3, s4).prepend(s5, s6).run(complete)  ≡  [s5, s6, s1, s2, s3, s4]', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1', 50), ƒ(l, 's2', 50)).append(ƒ(l, 's3'), ƒ(l, 's4', 50)).prepend(ƒ(l, 's5'), ƒ(l, 's6')).run(() =>
+					{
+						expect(l).to.be.equalTo(['s5', 's6', 's1', 's2', 's3', 's4']);
+						done();
+					});
+				});
+
+				it('[sync & async] parallel(p1, p2).append(p3, p4).prepend(p5, p6).run(complete)  ≡  [p5, p6, p3, p1, p2, p4]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1', 50), ƒ(l, 'p2', 50)).append(ƒ(l, 'p3'), ƒ(l, 'p4', 50)).prepend(ƒ(l, 'p5'), ƒ(l, 'p6')).run(() =>
+					{
+						expect(l).to.be.equalTo(['p5', 'p6', 'p3', 'p1', 'p2', 'p4']);
+						done();
+					});
 				});
 
 			});

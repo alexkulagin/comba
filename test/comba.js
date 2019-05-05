@@ -226,7 +226,7 @@
 		});
 
 
-		describe(H('\n\nDELAED EXECUTION:'), () =>
+		describe(H('\n\nDELAY RUNNING:'), () =>
 		{
 			describe('', () =>
 			{

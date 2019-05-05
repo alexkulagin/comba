@@ -256,6 +256,34 @@
 		});
 
 
+		describe(H('\n\nINTERVAL EXECUTION:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] series(s1, s2).interval(100).run()', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).interval(100).run();
+
+					expect(l.length).to.equal(1);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 175);
+				});
+
+				it('[sync & async] parallel(p1, p2).interval(100).run()', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2', 50)).interval(100).run();
+
+					expect(l.length).to.equal(1);
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 175);
+				});
+
+			});
+		});
+
+
 		describe(H('\n\nINSERTING TASKS:'), () =>
 		{
 			describe('', () =>

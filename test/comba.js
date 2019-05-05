@@ -94,7 +94,7 @@
 		});
 
 
-		describe(H('\n\nSERIES EXECUTION:'), () =>
+		describe(H('\n\nSERIES TASKS:'), () =>
 		{
 			describe('', () =>
 			{
@@ -134,7 +134,7 @@
 		});
 
 
-		describe(H('\n\nPARALLEL EXECUTION:'), () =>
+		describe(H('\n\nPARALLEL TASKS:'), () =>
 		{
 			describe('', () =>
 			{
@@ -174,7 +174,7 @@
 		});
 
 
-		describe(H('\n\nPARALLEL EXECUTION (LIMITED):'), () =>
+		describe(H('\n\nPARALLEL TASKS (LIMITED):'), () =>
 		{
 			describe('', () =>
 			{
@@ -256,7 +256,7 @@
 		});
 
 
-		describe(H('\n\nPREPEND & APPEND:'), () =>
+		describe(H('\n\nINSERTING TASKS:'), () =>
 		{
 			describe('', () =>
 			{

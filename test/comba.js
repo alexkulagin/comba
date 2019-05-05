@@ -285,4 +285,42 @@
 			});
 		});
 
+
+		describe(H('\n\nPASSING LISTS:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] series(listA, listB).prepend(listC).append(listD).run(complete)  ≡  [s4, s5, s1, s2, s1, s2, s3, s4, s5, s1, s4, s5, s4, s2]', (done) =>
+				{
+					const l = [];
+					const listA = [ƒ(l, 's1', 50), ƒ(l, 's2', 50), [ƒ(l, 's3'), ƒ(l, 's4', 50)]];
+					const listB = [ƒ(l, 's5'), [ƒ(l, 's1', 50), [ƒ(l, 's4', 50), ƒ(l, 's5')]]];
+					const listC = [ƒ(l, 's4', 50), [ƒ(l, 's5'), [ƒ(l, 's1', 50), ƒ(l, 's2', 50)]]];
+					const listD = [ƒ(l, 's4', 50), ƒ(l, 's2', 50)];
+
+					series(listA, listB).prepend(listC).append(listD).run(() =>
+					{
+						expect(l).to.be.equalTo(['s4', 's5', 's1', 's2', 's1', 's2', 's3', 's4', 's5', 's1', 's4', 's5', 's4', 's2']);
+						done();
+					});
+				});
+
+				it('[sync & async] parallel(listA, listB).prepend(listC).append(listD).run(complete)  ≡  [p5, p3, p5, p5, p4, p1, p2, p1, p2, p4, p1, p4, p4, p2]', (done) =>
+				{
+					const l = [];
+					const listA = [ƒ(l, 'p1', 50), ƒ(l, 'p2', 50), [ƒ(l, 'p3'), ƒ(l, 'p4', 50)]];
+					const listB = [ƒ(l, 'p5'), [ƒ(l, 'p1', 50), [ƒ(l, 'p4', 50), ƒ(l, 'p5')]]];
+					const listC = [ƒ(l, 'p4', 50), [ƒ(l, 'p5'), [ƒ(l, 'p1', 50), ƒ(l, 'p2', 50)]]];
+					const listD = [ƒ(l, 'p4', 50), ƒ(l, 'p2', 50)];
+
+					parallel(listA, listB).prepend(listC).append(listD).run(() =>
+					{
+						expect(l).to.be.equalTo(['p5', 'p3', 'p5', 'p5', 'p4', 'p1', 'p2', 'p1', 'p2', 'p4', 'p1', 'p4', 'p4', 'p2']);
+						done();
+					});
+				});
+
+			});
+		});
+
 	});

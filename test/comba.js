@@ -351,4 +351,37 @@
 			});
 		});
 
+
+		describe(H('\n\nEVENT HANDLERS:'), () =>
+		{
+			describe('', () =>
+			{
+				it('[sync & async] series(s1, s2).on(\'run\', handler).run()', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('run', () => {
+						expect(l.length).to.equal(0);
+					}).run();
+
+					
+					setTimeout(() => ( expect(l.length).to.equal(2), done() ), 75);
+				});
+
+
+				it('[sync & async] series(s1, s2).on(\'complete\', handler).run()', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('complete', () => {
+						expect(l.length).to.equal(2);
+						l.push('test');
+					}).run();
+
+					
+					setTimeout(() => ( expect(l.length).to.equal(3), done() ), 75);
+				});
+			});
+		});
+
 	});

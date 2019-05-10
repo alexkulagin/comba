@@ -368,11 +368,11 @@
 				});
 
 
-				it('[sync & async] series(s1, s2).on(\'complete\', handler).run()', (done) =>
+				it('[sync & async] series(s1, s2).on(\'end\', handler).run()', (done) =>
 				{
 					const l = [];
 
-					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('complete', () => {
+					series(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('end', () => {
 						expect(l.length).to.equal(2);
 						l.push('test');
 					}).run();
@@ -393,11 +393,11 @@
 				});
 
 
-				it('[sync & async] parallel(s1, s2).on(\'complete\', handler).run()', (done) =>
+				it('[sync & async] parallel(s1, s2).on(\'end\', handler).run()', (done) =>
 				{
 					const l = [];
 
-					parallel(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('complete', () => {
+					parallel(ƒ(l, 's1'), ƒ(l, 's2', 50)).on('end', () => {
 						expect(l.length).to.equal(2);
 						l.push('test');
 					}).run();

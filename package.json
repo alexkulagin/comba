@@ -1,8 +1,8 @@
 {
   "name": "comba",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "...",
-  "main": "lib/Comba.js",
+  "main": "lib/comba.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexkulagin/comba.git"

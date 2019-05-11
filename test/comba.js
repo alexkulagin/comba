@@ -73,7 +73,7 @@
 			describe('', () =>
 			{
 				it('series is function', () => expect(typeof series).to.equal('function'));
-				it('series return instance', () => expect(typeof series()).to.equal('object'));
+				it('series return instance as function', () => expect(typeof series()).to.equal('function'));
 				it('series instance is CombaList', () => expect(series().constructor.name).to.equal('CombaList'));
 				it('series instance not equal series instance', () => expect(series()).to.not.equal(series()));
 			});
@@ -81,7 +81,7 @@
 			describe('', () =>
 			{
 				it('parallel is function', () => expect(typeof parallel).to.equal('function'));
-				it('parallel return instance', () => expect(typeof parallel()).to.equal('object'));
+				it('parallel return instance as function', () => expect(typeof parallel()).to.equal('function'));
 				it('parallel instance is CombaList', () => expect(parallel().constructor.name).to.equal('CombaList'));
 				it('parallel instance not equal parallel instance', () => expect(parallel()).to.not.equal(parallel()));
 			});
@@ -109,6 +109,17 @@
 					done();
 				});
 
+				it('[sync] series(s1, s2, s3)()  ≡  [s1, s2, s3]', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2'), ƒ(l, 's3'))();
+
+					expect(l).to.be.equalTo(['s1', 's2', 's3']);
+
+					done();
+				});
+
 				it('[sync] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
 					const l = [];
@@ -120,11 +131,33 @@
 					});
 				});
 
+				it('[sync] series(s1, s2, s3)(complete)  ≡  [s1, s2, s3]', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1'), ƒ(l, 's2'), ƒ(l, 's3'))(() =>
+					{
+						expect(l).to.be.equalTo(['s1', 's2', 's3']);
+						done();
+					});
+				});
+
 				it('[async] series(s1, s2, s3).run(complete)  ≡  [s1, s2, s3]', (done) =>
 				{
 					const l = [];
 
 					series(ƒ(l, 's1', 100), ƒ(l, 's2', 50), ƒ(l, 's3', 150)).run(() =>
+					{
+						expect(l).to.be.equalTo(['s1', 's2', 's3']);
+						done();
+					});
+				});
+
+				it('[async] series(s1, s2, s3)(complete)  ≡  [s1, s2, s3]', (done) =>
+				{
+					const l = [];
+
+					series(ƒ(l, 's1', 100), ƒ(l, 's2', 50), ƒ(l, 's3', 150))(() =>
 					{
 						expect(l).to.be.equalTo(['s1', 's2', 's3']);
 						done();
@@ -149,6 +182,17 @@
 					done();
 				});
 
+				it('[sync] parallel(p1, p2, p3)()  ≡  [p1, p2, p3]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2'), ƒ(l, 'p3'))();
+
+					expect(l).to.be.equalTo(['p1', 'p2', 'p3']);
+
+					done();
+				});
+
 				it('[sync] parallel(p1, p2, p3).run(complete)  ≡  [p1, p2, p3]', (done) =>
 				{
 					const l = [];
@@ -160,11 +204,33 @@
 					});
 				});
 
+				it('[sync] parallel(p1, p2, p3)(complete)  ≡  [p1, p2, p3]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1'), ƒ(l, 'p2'), ƒ(l, 'p3'))(() =>
+					{
+						expect(l).to.be.equalTo(['p1', 'p2', 'p3']);
+						done();
+					});
+				});
+
 				it('[async] parallel(p1, p2, p3).run(complete)  ≡  [p2, p3, p1]', (done) =>
 				{
 					const l = [];
 
 					parallel(ƒ(l, 'p1', 75), ƒ(l, 'p2', 50), ƒ(l, 'p3', 60)).run(() =>
+					{
+						expect(l).to.be.equalTo(['p2', 'p3', 'p1']);
+						done();
+					});
+				});
+
+				it('[async] parallel(p1, p2, p3)(complete)  ≡  [p2, p3, p1]', (done) =>
+				{
+					const l = [];
+
+					parallel(ƒ(l, 'p1', 75), ƒ(l, 'p2', 50), ƒ(l, 'p3', 60))(() =>
 					{
 						expect(l).to.be.equalTo(['p2', 'p3', 'p1']);
 						done();

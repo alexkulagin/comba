@@ -23,7 +23,7 @@
 		// MODULES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { series, parallel } = require('../lib/Comba');
+			const { series, parallel } = require('../lib/comba');
 
 
 
@@ -74,7 +74,7 @@
 			{
 				it('series is function', () => expect(typeof series).to.equal('function'));
 				it('series return instance', () => expect(typeof series()).to.equal('object'));
-				it('series instance is Comba', () => expect(series().constructor.name).to.equal('Comba'));
+				it('series instance is CombaList', () => expect(series().constructor.name).to.equal('CombaList'));
 				it('series instance not equal series instance', () => expect(series()).to.not.equal(series()));
 			});
 
@@ -82,7 +82,7 @@
 			{
 				it('parallel is function', () => expect(typeof parallel).to.equal('function'));
 				it('parallel return instance', () => expect(typeof parallel()).to.equal('object'));
-				it('parallel instance is Comba', () => expect(parallel().constructor.name).to.equal('Comba'));
+				it('parallel instance is CombaList', () => expect(parallel().constructor.name).to.equal('CombaList'));
 				it('parallel instance not equal parallel instance', () => expect(parallel()).to.not.equal(parallel()));
 			});
 

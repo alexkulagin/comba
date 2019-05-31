@@ -1,6 +1,6 @@
 {
   "name": "comba",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "...",
   "main": "lib/comba.js",
   "repository": {
@@ -19,6 +19,7 @@
     "mocha": "^6.1.4"
   },
   "scripts": {
-    "test": "mocha ./**/*.spec.js --recursive"
+    "test": "node ./spec/runner.js",
+    "test2": "mocha ./**/*.spec.js --recursive"
   }
 }

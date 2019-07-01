@@ -1,0 +1,1 @@
+{PENDING     ←} ${ clr.PENDING(title + ' ') }

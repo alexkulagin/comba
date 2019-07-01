@@ -12,11 +12,5 @@
   },
   "homepage": "https://github.com/alexkulagin/comba#readme",
   "author": "alexkulagin.com",
-  "license": "MIT",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-arrays": "^2.0.0",
-    "mocha": "^6.1.4",
-    "module-alias": "^2.2.0"
-  }
+  "license": "MIT"
 }

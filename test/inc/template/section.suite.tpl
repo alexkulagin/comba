@@ -1,0 +1,3 @@
+
+{SUITE ${ '❯  ' + title }
+${ ('   ').padEnd(width, '⁙⁘') }}

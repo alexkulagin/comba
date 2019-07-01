@@ -1,0 +1,1 @@
+{ERROR    ${ clr.BLOCK('›')} ✗} ${ clr.ERROR(title + ' ') }

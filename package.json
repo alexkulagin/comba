@@ -1,6 +1,6 @@
 {
   "name": "comba",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "lightweight task runner",
   "main": "lib/comba.js",
   "repository": {

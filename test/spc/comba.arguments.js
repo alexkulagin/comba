@@ -126,6 +126,17 @@
 					expect(array).to.be.equalTo(['a','b','c','d','e']), next()
 				});
 			});
+
+
+			it('comba({queue:[a,e,c,d,b],onComplete:handler}).run()', (next) =>
+			{
+				array.length = 0;
+
+				comba({queue:[a,e,c,d,b],onComplete:() => {
+						expect(array).to.be.equalTo(['a','e','c','d','b']),
+						expect(array.length).to.equal(4), next()
+				}}).run();
+			});
 		});
 
 

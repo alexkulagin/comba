@@ -134,7 +134,7 @@
 
 				comba({queue:[a,e,c,d,b],onComplete:() => {
 						expect(array).to.be.equalTo(['a','e','c','d','b']),
-						expect(array.length).to.equal(4), next()
+						expect(array.length).to.equal(5), next()
 				}}).run();
 			});
 		});

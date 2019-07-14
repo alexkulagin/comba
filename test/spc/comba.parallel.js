@@ -22,11 +22,11 @@
 		{
 			it('parallel is function', () => expect(typeof parallel).to.equal('function'));
 
-			it('parallel() returns instance of CombaList', () =>
+			it('parallel() returns instance of Comba', () =>
 			{
 				let list = parallel();
 
-				expect(list.constructor.name).to.equal('CombaList');
+				expect(list.constructor.name).to.equal('Comba');
 				expect(list).to.not.equal(parallel());
 			});
 		});

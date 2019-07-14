@@ -26,11 +26,11 @@
 
 			it('comba is function', () => expect(typeof comba).to.equal('function'));
 
-			it('comba() returns instance of CombaList', () =>
+			it('comba() returns instance of Comba', () =>
 			{
 				let list = comba();
 
-				expect(list.constructor.name).to.equal('CombaList');
+				expect(list.constructor.name).to.equal('Comba');
 				expect(list).to.not.equal(comba());
 			});
 		});

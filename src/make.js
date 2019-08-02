@@ -11,7 +11,7 @@
 	//┘
 
 		const
-			CombaTask = require('./task'),
+			Task = require('./task'),
 			Utils = require('./utils');
 
 
@@ -27,7 +27,7 @@
 		// DEBUGGING
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { log, error, inspect } = Utils;
+			const { log, error } = Utils;
 
 
 
@@ -68,7 +68,7 @@
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				if (isFunction(value) || isAsyncFunction(value)) {
-					tasks.push(new CombaTask(value));
+					tasks.push(new Task(value));
 				}
 
 

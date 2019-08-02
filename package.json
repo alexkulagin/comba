@@ -1,6 +1,6 @@
 {
 	"name": "comba",
-	"version": "2.1.13",
+	"version": "2.1.14",
 	"description": "task runner",
 	"main": "comba.js",
 	"scripts": {
@@ -10,11 +10,18 @@
 	},
 	"keywords": [],
 	"homepage": "https://github.com/alexkulagin/comba#readme",
-	"repository": { "type": "git", "url": "git+https://github.com/alexkulagin/comba.git" },
-	"bugs": { "url": "https://github.com/alexkulagin/comba/issues" },
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alexkulagin/comba.git"
+	},
+	"bugs": {
+		"url": "https://github.com/alexkulagin/comba/issues"
+	},
 	"license": "MIT",
 	"author": "alexkulagin.com",
-	"engines": { "node": ">=10" },
+	"engines": {
+		"node": ">=10"
+	},
 	"devDependencies": {
 		"module-alias": "^2.2.0",
 		"mocha": "^6.2.0",
@@ -28,5 +35,7 @@
 		"rollup-plugin-sourcemaps": "^0.4.2",
 		"rollup-plugin-node-resolve": "^5.2.0"
 	},
-	"files": [ "lib" ]
+	"files": [
+		"lib"
+	]
 }

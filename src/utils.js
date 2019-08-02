@@ -15,15 +15,6 @@
 
 
 
-	//┐  IMPORTS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-
-		const inspect = require('util').inspect;
-
-
-
 	//┐  DEBUGGING
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
@@ -35,15 +26,6 @@
 			const __log = (...values) => console.log(...values);
 
 			__.log = __log;
-
-
-
-		// INSPECTOR
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			const __inspect = (value, depth = 5, breakLength = 80) => inspect(value, { colors: true, compact: true, depth: depth, breakLength: breakLength });
-
-			__.inspect = __inspect;
 
 
 
@@ -218,7 +200,7 @@
 		// IS COMBA TASK
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const __isTask = value => __isObject(value) && value.constructor.name === 'CombaTask';
+			const __isTask = value => __isObject(value) && value.constructor.name === 'Task';
 
 			__.isTask = __isTask;
 

@@ -22,7 +22,7 @@
 
 		[{
 			'@spc': $('spc'),
-			'@comba': $('..', 'lib', 'comba'),
+			'@comba': $('..', 'comba'),
 			'@commons': $('inc', 'commons'),
 			'@mocha': $('inc', 'mocha')
 

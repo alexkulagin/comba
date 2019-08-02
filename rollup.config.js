@@ -53,12 +53,20 @@
 
 				replace({
 					exclude: [ 'node_modules/**', 'test/**' ],
+
 					IS_DEVELOPMENT: IS_DEVELOPMENT,
 					IS_PRODUCTION: IS_PRODUCTION
 				}),
 
-				IS_PRODUCTION === true && terser({
+				IS_PRODUCTION === true && terser(
+				{
+					mangle: {
+						toplevel: true,
+						reserved: ['Comba']
+					},
+
 					sourcemap: true,
+
 					//include: [/^.+\.min\.js$/, '*esm*', '*web*'],
 					//exclude: [ 'some*' ]
 				}),

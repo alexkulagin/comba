@@ -10,9 +10,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			Task = require('./task'),
-			Utils = require('./utils');
+		const Task = require('./task');
 
 
 
@@ -20,14 +18,22 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const { isFunction, isAsyncFunction, isArray, isPlain, isList, isTask } = Utils;
+		const
+			isFunction = require('./hlp/isFunction'),
+			isAsyncFunction = require('./hlp/isAsyncFunction'),
+			isArray = require('./hlp/isArray'),
+			isPlain = require('./hlp/isPlain'),
+			isCombaList = require('./hlp/isCombaList'),
+			isCombaTask = require('./hlp/isCombaTask');
 
 
 
 		// DEBUGGING
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { log, error } = Utils;
+			const
+				log = require('./hlp/log'),
+				error = require('./hlp/error');
 
 
 
@@ -75,7 +81,7 @@
 			// PUSH COMBA TASK
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-				else if (isTask(value)) {
+				else if (isCombaTask(value)) {
 					tasks.push(value);
 				}
 
@@ -83,7 +89,7 @@
 			// PUSH COMBA LIST
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-				else if (isList(value)) {
+				else if (isCombaList(value)) {
 					tasks.push(value);
 				}
 

@@ -12,8 +12,7 @@
 
 		const
 			Mill = require('./mill'),
-			Make = require('./make'),
-			Utils = require('./utils');
+			Make = require('./make');
 
 
 
@@ -22,23 +21,22 @@
 	//┘
 
 		const
-			setPrototypeOf = Object.setPrototypeOf,
-
-			{ newObj, hasKey, decimalMs, onCapitalize, isInt, isFunction } = Utils;
+			setPrototypeOf = require('./hlp/setPrototypeOf'),
+			objectCreate = require('./hlp/objectCreate'),
+			hasKey = require('./hlp/hasKey'),
+			toDecimal = require('./hlp/toDecimal'),
+			prefixCap = require('./hlp/prefixCap'),
+			isInt = require('./hlp/isInt'),
+			isFunction = require('./hlp/isFunction');
 
 
 
 		// DEBUGGING
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { log, error } = Utils;
-			
-			if (IS_DEVELOPMENT) {
-				console.log('dev');
-			}
-			if (IS_PRODUCTION) {
-				console.log('prod');
-			}
+			const
+				log = require('./hlp/log'),
+				error = require('./hlp/error');
 
 
 
@@ -47,7 +45,7 @@
 	//┘
 
 		const
-			defaults = newObj();
+			defaults = objectCreate();
 
 			defaults.parallel = false;
 			defaults.limit = 0;
@@ -71,7 +69,7 @@
 
 	function Comba (options)
 	{
-		const instance = (!this || !(this instanceof Comba)) ? newObj() : this;
+		const instance = (!this || !(this instanceof Comba)) ? objectCreate() : this;
 
 		if (options)
 		{
@@ -80,9 +78,9 @@
 			}
 		}
 
-		else options = newObj();
+		else options = objectCreate();
 
-		const ctx = Object.assign(newObj(), defaults, options);
+		const ctx = Object.assign(objectCreate(), defaults, options);
 
 		ctx.instance = setPrototypeOf(onComplete => ctx.instance.run(onComplete), instance);
 		ctx.instance.constructor = Comba;
@@ -145,7 +143,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.interval = decimalMs(value);
+								ctx.interval = toDecimal(value);
 
 								return instance;
 							}
@@ -191,7 +189,7 @@
 						{
 							value: (event, handler) =>
 							{
-								if (isFunction(handler) && hasKey(ctx, onCapitalize(event))) {
+								if (isFunction(handler) && hasKey(ctx, prefixCap('on', event))) {
 									ctx[event] = handler;
 								}
 
@@ -249,16 +247,16 @@
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				series: {
-				get: () => (...values) => new Comba({ parallel: false, queue: values })
-			},
+					get: () => (...values) => new Comba({ parallel: false, queue: values })
+				},
 
 
 			// PARALLEL LIST
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				parallel: {
-				get: () => (...values) => new Comba({ parallel: true, queue: values })
-			}
+					get: () => (...values) => new Comba({ parallel: true, queue: values })
+				}
 		});
 
 

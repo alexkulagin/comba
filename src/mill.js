@@ -6,29 +6,23 @@
 //┘
 
 
-	//┐  IMPORTS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		const Utils = require('./utils');
-
-
-
 	//┐  UTILS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
 		const
-			setPrototypeOf = Object.setPrototypeOf,
-
-			{ newObj, delay, isFunction } = Utils;
+			setPrototypeOf = require('./hlp/setPrototypeOf'),
+			objectCreate = require('./hlp/objectCreate'),
+			delay = require('./hlp/delay');
 
 
 
 		// DEBUGGING
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			const { log, error } = Utils;
+			const
+				log = require('./hlp/log'),
+				error = require('./hlp/error');
 
 
 
@@ -41,7 +35,7 @@
 	function Mill (comba)
 	{
 
-		const ctx = Object.assign(newObj(), comba);
+		const ctx = Object.assign(objectCreate(), comba);
 
 
 		// PROPERTIES

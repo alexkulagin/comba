@@ -5,7 +5,8 @@
 	"main": "comba.js",
 	"scripts": {
 		"build": "rollup -c && npm run test",
-		"watch": "NODE_ENV=development rollup -c -w",
+		"build.dev": "NODE_ENV=development rollup -c",
+		"build.watch": "NODE_ENV=development rollup -c -w",
 		"test": "node ./test/index"
 	},
 	"keywords": [],

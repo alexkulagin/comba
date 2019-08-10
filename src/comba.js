@@ -11,8 +11,8 @@
 	//┘
 
 		const
-			Mill = require('./mill'),
-			Make = require('./make');
+			Task = require('./task'),
+			Mill = require('./mill');
 
 
 
@@ -23,11 +23,17 @@
 		const
 			setPrototypeOf = require('./hlp/setPrototypeOf'),
 			objectCreate = require('./hlp/objectCreate'),
-			hasKey = require('./hlp/hasKey'),
 			toDecimal = require('./hlp/toDecimal'),
 			prefixCap = require('./hlp/prefixCap'),
+			hasKey = require('./hlp/hasKey'),
+
 			isInt = require('./hlp/isInt'),
-			isFunction = require('./hlp/isFunction');
+			isFunction = require('./hlp/isFunction'),
+			isAsyncFunction = require('./hlp/isAsyncFunction'),
+			isArray = require('./hlp/isArray'),
+			isPlain = require('./hlp/isPlain'),
+			isCombaList = require('./hlp/isCombaList'),
+			isCombaTask = require('./hlp/isCombaTask');
 
 
 
@@ -74,7 +80,7 @@
 		if (options)
 		{
 			if (options.queue && options.queue.length) {
-				options.queue = Make(options.queue);
+				options.queue = __makeTasklist(options.queue);
 			}
 		}
 
@@ -91,7 +97,7 @@
 
 
 
-	//┐  PUBLIC INTERFACE
+	//┐  COMBA INTERFACE
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
@@ -158,7 +164,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.push(...Make(values));
+									queue.push(...__makeTasklist(values));
 								}
 
 								return instance;
@@ -174,7 +180,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.unshift(...Make(values));
+									queue.unshift(...__makeTasklist(values));
 								}
 
 								return instance;
@@ -236,7 +242,7 @@
 
 
 
-	//┐  STATIC
+	//┐  PUBLIC STATIC
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
@@ -258,6 +264,95 @@
 					get: () => (...values) => new Comba({ parallel: true, queue: values })
 				}
 		});
+
+
+
+	//┐  TASKLIST MAKER
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		function __makeTasklist (...values)
+		{
+			const tasks = [];
+
+			if (!values.length) {
+				return tasks;
+			}
+
+			if (values.length === 1) {
+				return __prepareTasklist(values[0], tasks);
+			}
+
+			return __prepareTasklist(values, tasks);
+		}
+
+
+
+		// PREPARE TASKLIST
+		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
+			function __prepareTasklist (values, tasks)
+			{
+
+				if (!values) {
+					// error
+				}
+
+
+				// PUSH FUNCTION
+				// ─────────────────────────────────────────────────
+
+					if (isFunction(values) || isAsyncFunction(values)) {
+						tasks.push(new Task(values));
+					}
+
+
+				// PUSH COMBA TASK
+				// ─────────────────────────────────────────────────
+
+					else if (isCombaTask(values)) {
+						tasks.push(values);
+					}
+
+
+				// PUSH COMBA LIST
+				// ─────────────────────────────────────────────────
+
+					else if (isCombaList(values)) {
+						tasks.push(values);
+					}
+
+
+				// EACH ARRAY VALUES
+				// ─────────────────────────────────────────────────
+
+					else if (isArray(values))
+					{
+						if (!values.length) {
+							// error
+						}
+
+						values.forEach(value => __prepareTasklist(value, tasks));
+					}
+
+
+				// EACH OBJECT KEYS
+				// ─────────────────────────────────────────────────
+
+					else if (isPlain(values))
+					{
+						const keys = Object.keys(values);
+
+						if (!keys.length) {
+							// error
+						}
+
+						keys.forEach(key => __prepareTasklist(values[key], tasks));
+					}
+
+
+				return tasks;
+			}
 
 
 

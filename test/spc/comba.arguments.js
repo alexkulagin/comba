@@ -62,21 +62,21 @@
 			});
 
 
-			it('comba({queue:[a,b,c,d,e],parallel:true}) is type of parallel', (next) =>
+			it('comba({queue:[a,b,c,d,e],seriate:false}) is type of parallel', (next) =>
 			{
 				array.length = 0;
 
-				comba({queue:[a,b,c,d,e],parallel:true}).run(() => {
+				comba({queue:[a,b,c,d,e],seriate:false}).run(() => {
 					expect(array).to.be.equalTo(['a','c','b','e','d']), next()
 				});
 			});
 
 
-			it('comba({queue:[a,b,c,d,e],parallel:true,limit:2}).run(complete)', (next) =>
+			it('comba({queue:[a,b,c,d,e],seriate:false,limit:2}).run(complete)', (next) =>
 			{
 				array.length = 0;
 
-				comba({queue:[a,b,c,d,e],parallel:true,limit:1}).run(() => {
+				comba({queue:[a,b,c,d,e],seriate:false,limit:1}).run(() => {
 					expect(array).to.be.equalTo(['a','b','c','d','e']), next()
 				});
 			});

@@ -65,10 +65,7 @@
 						reserved: ['Comba']
 					},
 
-					sourcemap: true,
-
-					//include: [/^.+\.min\.js$/, '*esm*', '*web*'],
-					//exclude: [ 'some*' ]
+					sourcemap: true
 				}),
 
 				sourcemaps()

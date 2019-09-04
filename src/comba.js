@@ -53,7 +53,7 @@
 		const
 			defaults = objectCreate();
 
-			defaults.seriate = true;
+			defaults.serial = true;
 			defaults.limit = 0;
 
 			defaults.delay = 0;
@@ -104,7 +104,7 @@
 		function __interface (ctx)
 		{
 
-			const { instance, seriate, queue } = ctx;
+			const { instance, serial, queue } = ctx;
 
 
 
@@ -121,7 +121,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.limit = (!seriate && isInt(value)) ? value : 0;
+								ctx.limit = (!serial && isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -253,7 +253,7 @@
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				series: {
-					get: () => (...values) => new Comba({ seriate: true, queue: values })
+					get: () => (...values) => new Comba({ serial: true, queue: values })
 				},
 
 
@@ -261,7 +261,7 @@
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				parallel: {
-					get: () => (...values) => new Comba({ seriate: false, queue: values })
+					get: () => (...values) => new Comba({ serial: false, queue: values })
 				}
 		});
 

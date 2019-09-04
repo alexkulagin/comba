@@ -119,7 +119,7 @@
 
 	function __exec (ctx)
 	{
-		if (ctx.seriate === false)
+		if (ctx.serial === false)
 		{
 			ctx.queue.some((value, index) =>
 			{
@@ -161,7 +161,7 @@
 				}
 
 
-				if (ctx.pending > 0 && (ctx.seriate || !ctx.seriate && ctx.limit > 0 && ctx.limit < ctx.total))
+				if (ctx.pending > 0 && (ctx.serial || !ctx.serial && ctx.limit > 0 && ctx.limit < ctx.total))
 				{
 					if (ctx.interval) {
 						return delay(__next, ctx.interval, ctx);

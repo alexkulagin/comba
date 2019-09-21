@@ -11,8 +11,8 @@
 	//┘
 
 		const
-			setPrototypeOf = require('./hlp/setPrototypeOf'),
-			objectCreate = require('./hlp/objectCreate');
+			setPrototypeOf = require('./h/setPrototypeOf'),
+			objectCreate = require('./h/objectCreate');
 
 
 
@@ -20,8 +20,8 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const
-				log = require('./hlp/log'),
-				error = require('./hlp/error');
+				log = require('./h/log'),
+				error = require('./h/error');
 
 
 

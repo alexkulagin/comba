@@ -21,19 +21,19 @@
 	//┘
 
 		const
-			setPrototypeOf = require('./hlp/setPrototypeOf'),
-			objectCreate = require('./hlp/objectCreate'),
-			toDecimal = require('./hlp/toDecimal'),
-			prefixCap = require('./hlp/prefixCap'),
-			hasKey = require('./hlp/hasKey'),
+			setPrototypeOf = require('./h/setPrototypeOf'),
+			objectCreate = require('./h/objectCreate'),
+			toDecimal = require('./h/toDecimal'),
+			prefixCap = require('./h/prefixCap'),
+			hasKey = require('./h/hasKey'),
 
-			isInt = require('./hlp/isInt'),
-			isFunction = require('./hlp/isFunction'),
-			isAsyncFunction = require('./hlp/isAsyncFunction'),
-			isArray = require('./hlp/isArray'),
-			isPlain = require('./hlp/isPlain'),
-			isCombaList = require('./hlp/isCombaList'),
-			isCombaTask = require('./hlp/isCombaTask');
+			isInt = require('./h/isInt'),
+			isFunction = require('./h/isFunction'),
+			isAsyncFunction = require('./h/isAsyncFunction'),
+			isArray = require('./h/isArray'),
+			isPlain = require('./h/isPlain'),
+			isCombaList = require('./h/isCombaList'),
+			isCombaTask = require('./h/isCombaTask');
 
 
 
@@ -41,8 +41,8 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const
-				log = require('./hlp/log'),
-				error = require('./hlp/error');
+				log = require('./h/log'),
+				error = require('./h/error');
 
 
 
@@ -53,17 +53,17 @@
 		const
 			defaults = objectCreate();
 
-			defaults.serial = true;
-			defaults.limit = 0;
+			defaults.queue = [];
 
+			defaults.serial = true;
+
+			defaults.limit = 0;
 			defaults.delay = 0;
 			defaults.interval = 0;
 
 			defaults.onRun = null;
 			defaults.onEnd = null;
 			defaults.onComplete = null;
-
-			defaults.queue = [];
 
 
 
@@ -80,7 +80,7 @@
 		if (options)
 		{
 			if (options.queue && options.queue.length) {
-				options.queue = __makeTasklist(options.queue);
+				options.queue = __makeList(options.queue);
 			}
 		}
 
@@ -164,7 +164,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.push(...__makeTasklist(values));
+									queue.push(...__makeList(values));
 								}
 
 								return instance;
@@ -180,7 +180,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.unshift(...__makeTasklist(values));
+									queue.unshift(...__makeList(values));
 								}
 
 								return instance;
@@ -271,7 +271,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __makeTasklist (...values)
+		function __makeList (...values)
 		{
 			const tasks = [];
 
@@ -280,10 +280,10 @@
 			}
 
 			if (values.length === 1) {
-				return __prepareTasklist(values[0], tasks);
+				return __prepareTasks(values[0], tasks);
 			}
 
-			return __prepareTasklist(values, tasks);
+			return __prepareTasks(values, tasks);
 		}
 
 
@@ -291,7 +291,7 @@
 		// PREPARE TASKLIST
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			function __prepareTasklist (values, tasks)
+			function __prepareTasks (values, tasks)
 			{
 
 				if (!values) {
@@ -332,7 +332,7 @@
 							// error
 						}
 
-						values.forEach(value => __prepareTasklist(value, tasks));
+						values.forEach(value => __prepareTasks(value, tasks));
 					}
 
 
@@ -347,7 +347,7 @@
 							// error
 						}
 
-						keys.forEach(key => __prepareTasklist(values[key], tasks));
+						keys.forEach(key => __prepareTasks(values[key], tasks));
 					}
 
 

@@ -103,16 +103,16 @@
 			const { instance, isSeries, queue } = ctx;
 
 
+			Object.defineProperties(instance,
+			{
 
-			// CHAINABLE METHODS
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+				// CHAINABLE METHODS
+				// ─────────────────────────────────────────────────
 
-				Object.defineProperties(instance,
-				{
-
+				
 					// PARALLEL LIMIT
 					// ·············································
-
+					
 						limit:
 						{
 							value: (value) =>
@@ -197,17 +197,14 @@
 
 								return instance;
 							}
-						}
-				});
+						},
 
 
 
-			// GETTERS
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+				// GETTERS
+				// ─────────────────────────────────────────────────
 
-				Object.defineProperties(instance,
-				{
-
+				
 					// IS LIST
 					// ·············································
 
@@ -229,39 +226,36 @@
 					// GET TOTAL TASKS
 					// ·············································
 
-						size: { get: () => __getTotalTasks(queue) }
-				});
+						size: { get: () => __getTotalTasks(queue) },
 
 
 
-			// PRIVATE
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+				// PRIVATE
+				// ─────────────────────────────────────────────────
 
-				Object.defineProperties(instance,
-				{
 
 					// INTERNAL
 					// ·············································
 
-						_internal: { value: (ƒ) => ƒ(ctx) }
-				});
+						_internal: { value: (ƒ) => ƒ(ctx) },
 
 
 
-			// EXECUTION
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+				// EXECUTION
+				// ─────────────────────────────────────────────────
 
-				Object.defineProperty(instance, 'run',
-				{
-					value: (onComplete) =>
+					run:
 					{
-						if (isFunction(onComplete)) {
-							ctx.onComplete = onComplete;
-						}
+						value: (onComplete) =>
+						{
+							if (isFunction(onComplete)) {
+								ctx.onComplete = onComplete;
+							}
 
-						new Mill(ctx).exec();
+							new Mill(ctx).exec();
+						}
 					}
-				});
+			});
 
 
 

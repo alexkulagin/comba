@@ -53,10 +53,6 @@
 		const
 			defaults = objectCreate();
 
-			defaults.queue = [];
-
-			defaults.serial = true;
-
 			defaults.limit = 0;
 			defaults.delay = 0;
 			defaults.interval = 0;
@@ -73,24 +69,26 @@
 //┘
 
 
-	function Comba (options)
+	function Comba (queue, isSeries)
 	{
-		const instance = (!this || !(this instanceof Comba)) ? objectCreate() : this;
-
-		if (options)
+		/*if (options)
 		{
 			if (options.queue && options.queue.length) {
 				options.queue = __makeList(options.queue);
 			}
 		}
 
-		else options = objectCreate();
+		else options = objectCreate();*/
 
-		const ctx = Object.assign(objectCreate(), defaults, options);
+		const
+			instance = (!this || !(this instanceof Comba)) ? objectCreate() : this,
+			ctx = Object.assign(objectCreate(), defaults);
+
+		ctx.queue = __makeList(queue);
+		ctx.isSeries = isSeries;
 
 		ctx.instance = setPrototypeOf(onComplete => ctx.instance.run(onComplete), instance);
 		ctx.instance.constructor = Comba;
-
 
 		return __interface(ctx);
 	}
@@ -104,7 +102,7 @@
 		function __interface (ctx)
 		{
 
-			const { instance, serial, queue } = ctx;
+			const { instance, isSeries, queue } = ctx;
 
 
 
@@ -121,7 +119,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.limit = (!serial && isInt(value)) ? value : 0;
+								ctx.limit = (!isSeries && isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -242,31 +240,6 @@
 
 
 
-	//┐  PUBLIC STATIC
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		Object.defineProperties(Comba,
-		{
-
-			// SERIES LIST
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-				series: {
-					get: () => (...values) => new Comba({ serial: true, queue: values })
-				},
-
-
-			// PARALLEL LIST
-			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-				parallel: {
-					get: () => (...values) => new Comba({ serial: false, queue: values })
-				}
-		});
-
-
-
 	//┐  TASKLIST MAKER
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
@@ -361,6 +334,23 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Comba;
+	module.exports = Object.defineProperties(objectCreate(),
+	{
+
+		// SERIES LIST
+		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+
+			series: {
+				get: () => (...values) => new Comba({ queue: values }, true)
+			},
+
+
+		// PARALLEL LIST
+		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+
+			parallel: {
+				get: () => (...values) => new Comba({ queue: values }, false)
+			}
+	});
 
 

@@ -208,7 +208,7 @@
 				Object.defineProperties(instance,
 				{
 
-					// IS COMBA LIST
+					// IS LIST
 					// ·············································
 
 						isList: { get: () => true },
@@ -217,7 +217,19 @@
 					// GET TASKS
 					// ·············································
 
-						tasks: { get: () => [ ...queue ] }
+						tasks: { get: () => [ ...queue ] },
+
+
+					// GET QUEUE LENGTH
+					// ·············································
+
+						length: { get: () => queue.length },
+
+
+					// GET TOTAL TASKS
+					// ·············································
+
+						size: { get: () => 0 }
 				});
 
 

@@ -369,3 +369,54 @@
 		});
 
 
+
+	//┐  GETTERS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		describe('GETTERS', () =>
+		{
+			const
+				array = [],
+				a = callback('a', array),
+				b = callback('b', array),
+				c = callback('c', array),
+				d = callback('d', array),
+				e = callback('e', array),
+				f = callback('f', array);
+
+
+			it('series(a,b,c).isList', () => expect(series(a,b,c).isList).to.equal(true));
+
+
+			it('series(a,b,c,d).tasks', () =>
+			{
+				const list = series(a,b,c,d).tasks;
+
+				expect(Array.isArray(list)).to.equal(true);
+				expect(list.length).to.equal(4);
+			});
+
+
+			it('series(a,b,c,d,e).length', () =>
+			{
+				const list = series(a,b,c,d,e);
+
+				expect(list.length).to.equal(5);
+				expect(list.length === list.tasks.length).to.equal(true);
+			});
+
+
+			it('series(a,b,listA,listB,c,d).size', () =>
+			{
+				const
+					nestedA = series(a,b,c,d,e,f),
+					nestedB = series(f,e,nestedA,b,a),
+					listA = series(e,f,d,c,b),
+					listB = parallel(c,d,f,nestedB,nestedA);
+
+				expect(series(a,b,listA,listB,c,d).size).to.equal(28);
+			});
+		});
+
+

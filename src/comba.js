@@ -44,63 +44,57 @@
 
 
 
-	//┐  DEFAULT OPTIONS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		const
-			defaults = objectCreate();
-
-			defaults.limit = 0;
-			defaults.delay = 0;
-			defaults.interval = 0;
-
-			defaults.onRun = null;
-			defaults.onEnd = null;
-			defaults.onComplete = null;
-
-
-
 
 //┐  CONSTRUCTOR
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
 
-	function Comba (queue, isSeries)
+	function Comba (tasks, isSeries)
 	{
-		/*if (options)
-		{
-			if (options.queue && options.queue.length) {
-				options.queue = __makeList(options.queue);
-			}
-		}
 
-		else options = objectCreate();*/
+		// QUEUE
+		
+		const queue = __make(tasks);
 
-		const
-			instance = (!this || !(this instanceof Comba)) ? objectCreate() : this,
-			ctx = Object.assign(objectCreate(), defaults);
 
-		ctx.queue = __makeList(queue);
-		ctx.isSeries = isSeries;
+		// OPTIONS
+		
+		const options = objectCreate();
 
-		ctx.instance = setPrototypeOf(onComplete => ctx.instance.run(onComplete), instance);
-		ctx.instance.constructor = Comba;
+		options.isSeries = isSeries;
 
-		return __interface(ctx);
+		options.limit = 0;
+		options.delay = 0;
+		options.interval = 0;
+
+		options.onRun = null;
+		options.onEnd = null;
+		options.onComplete = null;
+
+
+		// INSTANCE
+		
+		const instance = setPrototypeOf(callback => instance.run(callback), ((!this || !(this instanceof Comba)) ? objectCreate() : this));
+
+		instance.constructor = Comba;
+
+
+		return __interface(instance, options, queue);
+
 	}
 
 
 
-	//┐  COMBA INTERFACE
+
+	//┐  INTERFACE
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __interface (ctx)
+		function __interface (instance, options, queue)
 		{
 
-			const { instance, isSeries, queue } = ctx;
+			const { isSeries } = options;
 
 
 			Object.defineProperties(instance,
@@ -117,7 +111,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.limit = (!isSeries && isInt(value)) ? value : 0;
+								options.limit = (!isSeries && isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -131,7 +125,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.delay = (isInt(value)) ? value : 0;
+								options.delay = (isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -145,7 +139,7 @@
 						{
 							value: (value) =>
 							{
-								ctx.interval = toDecimal(value);
+								options.interval = toDecimal(value);
 
 								return instance;
 							}
@@ -160,7 +154,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.push(...__makeList(values));
+									queue.push(...__make(values));
 								}
 
 								return instance;
@@ -176,7 +170,7 @@
 							value: (...values) =>
 							{
 								if (values.length) {
-									queue.unshift(...__makeList(values));
+									queue.unshift(...__make(values));
 								}
 
 								return instance;
@@ -191,8 +185,8 @@
 						{
 							value: (event, handler) =>
 							{
-								if (isFunction(handler) && hasKey(ctx, prefixCap('on', event))) {
-									ctx[event] = handler;
+								if (isFunction(handler) && hasKey(options, prefixCap('on', event))) {
+									options[event] = handler;
 								}
 
 								return instance;
@@ -226,7 +220,7 @@
 					// GET TOTAL TASKS
 					// ·············································
 
-						size: { get: () => __getTotalTasks(queue) },
+						size: { get: () => __total(queue) },
 
 
 
@@ -237,11 +231,11 @@
 					// INTERNAL
 					// ·············································
 
-						_internal: { value: (ƒ) => ƒ(ctx) },
+						_internal: { value: (ƒ) => ƒ(options, queue) },
 
 
 
-				// EXECUTION
+				// START RUNNING
 				// ─────────────────────────────────────────────────
 
 					run:
@@ -249,10 +243,10 @@
 						value: (onComplete) =>
 						{
 							if (isFunction(onComplete)) {
-								ctx.onComplete = onComplete;
+								options.onComplete = onComplete;
 							}
 
-							new Mill(ctx).exec();
+							new Mill(options, queue).exec();
 						}
 					}
 			});
@@ -264,11 +258,12 @@
 
 
 
-	//┐  TASKLIST MAKER
+
+	//┐  MAKE TASKS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __makeList (...values)
+		function __make (...values)
 		{
 			const tasks = [];
 
@@ -277,18 +272,18 @@
 			}
 
 			if (values.length === 1) {
-				return __prepareTasks(values[0], tasks);
+				return __prepare(values[0], tasks);
 			}
 
-			return __prepareTasks(values, tasks);
+			return __prepare(values, tasks);
 		}
 
 
 
-		// PREPARE TASKLIST
+		// PREPARING
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			function __prepareTasks (values, tasks)
+			function __prepare (values, tasks)
 			{
 
 				if (!values) {
@@ -321,7 +316,7 @@
 							// error
 						}
 
-						values.forEach(value => __prepareTasks(value, tasks));
+						values.forEach(value => __prepare(value, tasks));
 					}
 
 
@@ -336,7 +331,7 @@
 							// error
 						}
 
-						keys.forEach(key => __prepareTasks(values[key], tasks));
+						keys.forEach(key => __prepare(values[key], tasks));
 					}
 
 
@@ -345,11 +340,12 @@
 
 
 
-	//┐  GET TOTAL TASKS
+
+	//┐  GET TOTAL
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __getTotalTasks (queue)
+		function __total (queue)
 		{
 			let total = 0;
 
@@ -362,7 +358,7 @@
 					}
 
 					else if (task.isList) {
-						total += __getTotalTasks(task.tasks);
+						total += __total(task.tasks);
 					}
 				});
 			}
@@ -384,7 +380,7 @@
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			series: {
-				get: () => (...values) => new Comba({ queue: values }, true)
+				get: () => (...values) => new Comba(values, true)
 			},
 
 
@@ -392,7 +388,7 @@
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			parallel: {
-				get: () => (...values) => new Comba({ queue: values }, false)
+				get: () => (...values) => new Comba(values, false)
 			}
 	});
 

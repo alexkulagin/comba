@@ -31,9 +31,7 @@
 			isFunction = require('./h/isFunction'),
 			isAsyncFunction = require('./h/isAsyncFunction'),
 			isArray = require('./h/isArray'),
-			isPlain = require('./h/isPlain'),
-			isCombaList = require('./h/isCombaList'),
-			isCombaTask = require('./h/isCombaTask');
+			isPlain = require('./h/isPlain');
 
 
 
@@ -210,6 +208,12 @@
 				Object.defineProperties(instance,
 				{
 
+					// IS COMBA LIST
+					// ·············································
+
+						isList: { get: () => true },
+
+
 					// GET TASKS
 					// ·············································
 
@@ -290,18 +294,10 @@
 					}
 
 
-				// PUSH COMBA TASK
+				// PUSH COMBA LIST OR COMBA TASK
 				// ─────────────────────────────────────────────────
 
-					else if (isCombaTask(values)) {
-						tasks.push(values);
-					}
-
-
-				// PUSH COMBA LIST
-				// ─────────────────────────────────────────────────
-
-					else if (isCombaList(values)) {
+					else if (values.isList || values.isTask) {
 						tasks.push(values);
 					}
 

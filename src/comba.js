@@ -302,19 +302,19 @@
 				}
 
 
-				// PUSH FUNCTION
-				// ─────────────────────────────────────────────────
-
-					if (isFunction(values) || isAsyncFunction(values)) {
-						tasks.push(new Task(values));
-					}
-
-
 				// PUSH COMBA LIST OR COMBA TASK
 				// ─────────────────────────────────────────────────
 
-					else if (values.isList || values.isTask) {
+					if (values.isList || values.isTask) {
 						tasks.push(values);
+					}
+
+
+				// PUSH FUNCTION
+				// ─────────────────────────────────────────────────
+
+					else if (isFunction(values) || isAsyncFunction(values)) {
+						tasks.push(new Task(values));
 					}
 
 

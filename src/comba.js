@@ -229,17 +229,21 @@
 					// GET TOTAL TASKS
 					// ·············································
 
-						size: { get: () => 0 }
+						size: { get: () => __getTotalTasks(queue) }
 				});
 
 
 
-			// INTERNAL
+			// PRIVATE
 			// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 				Object.defineProperties(instance,
 				{
-					_internal: { value: (ƒ) => ƒ(ctx) }
+
+					// INTERNAL
+					// ·············································
+
+						_internal: { value: (ƒ) => ƒ(ctx) }
 				});
 
 
@@ -344,6 +348,33 @@
 
 				return tasks;
 			}
+
+
+
+	//┐  GET TOTAL TASKS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		function __getTotalTasks (queue)
+		{
+			let total = 0;
+
+			if (queue.length)
+			{
+				queue.forEach(task =>
+				{
+					if (task.isTask) {
+						total += 1;
+					}
+
+					else if (task.isList) {
+						total += __getTotalTasks(task.tasks);
+					}
+				});
+			}
+
+			return total;
+		}
 
 
 

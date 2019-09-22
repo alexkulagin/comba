@@ -23,7 +23,7 @@
 			suite('01 SERIES EXECUTION', 'comba.series.js');
 			suite('02 PARALLEL EXECUTION', 'comba.parallel.js');
 			suite('03 TASK LIST', 'comba.list.js');
-			suite('04 ARGUMENTS', 'comba.arguments.js');
+			// suite('04 ARGUMENTS', 'comba.arguments.js');
 		});
 
 

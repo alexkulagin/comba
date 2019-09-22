@@ -31,7 +31,13 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const __options = { ui: 'bdd', ignoreLeaks: true, slow: 100, timeout: 60000, reporter: Secton };
+		const __options =
+		{
+			ui: 'bdd',
+			ignoreLeaks: true, bail: false,
+			slow: 100, timeout: 60000,
+			reporter: Secton
+		};
 
 
 

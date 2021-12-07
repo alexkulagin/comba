@@ -32,56 +32,33 @@
 //┘
 
 
-<<<<<<< HEAD:src/mill.js
 	function Mill (options, queue)
-=======
-	function CombaMill (combalist, callback)
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 	{
 
 		const ctx = Object.assign(objectCreate(), options);
 
 
-<<<<<<< HEAD:src/mill.js
 		// PROPERTIES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			ctx.total = queue.length;
 			ctx.pending = ctx.total;
 			ctx.completed = 0;
-=======
-
-		// QUEUE OF TASKS
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			ctx.queue = [...combalist.queue];
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 
 
 
 		// QUEUE OF TASKS
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-<<<<<<< HEAD:src/mill.js
 			ctx.queue = [ ...queue ];
-=======
-			ctx.total = ctx.queue.length;
-			ctx.pending = ctx.total;
-			ctx.completed = 0;
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 
 
 
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-<<<<<<< HEAD:src/mill.js
 			ctx.instance = setPrototypeOf(() => ctx.instance.exec(), this);
 			ctx.instance.constructor = Mill;
-=======
-			ctx.instance = __setPrototypeOf(() => ctx.instance.exec(), this);
-			ctx.instance.constructor = CombaMill;
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 
 
 		return __interface(ctx);
@@ -116,13 +93,6 @@
 			{
 				value: () =>
 				{
-<<<<<<< HEAD:src/mill.js
-=======
-					if (!ctx.queue.length) {
-						// error
-					}
-
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 					if (ctx.onRun) {
 						ctx.onRun();
 					}
@@ -154,11 +124,7 @@
 			ctx.queue.some((value, index) =>
 			{
 				if (ctx.interval && index > 0) {
-<<<<<<< HEAD:src/mill.js
 					delay(__next, ctx.interval * index, ctx);
-=======
-					__delay(__next, ctx.interval * index, ctx);
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 				}
 
 				else __next(ctx);
@@ -195,17 +161,10 @@
 				}
 
 
-<<<<<<< HEAD:src/mill.js
 				if (ctx.pending > 0 && (ctx.isSeries || !ctx.isSeries && ctx.limit > 0 && ctx.limit < ctx.total))
 				{
 					if (ctx.interval) {
 						return delay(__next, ctx.interval, ctx);
-=======
-				if (ctx.pending > 0 && (!ctx.parallel || ctx.parallel && ctx.limit > 0 && ctx.limit < ctx.total))
-				{
-					if (ctx.interval) {
-						return __delay(__next, ctx.interval, ctx);
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 					}
 
 					else return __next(ctx);
@@ -221,7 +180,6 @@
 	//┐  COMPLETE
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
-<<<<<<< HEAD:src/mill.js
 
 		function __complete (ctx, error)
 		{
@@ -234,20 +192,6 @@
 			}
 
 			if (ctx.onComplete) {
-=======
-
-		function __complete (ctx, error)
-		{
-			if (error) {
-				throw new Error ('callback error ' + error);
-			}
-
-			if (ctx.onEnd) {
-				ctx.onEnd();
-			}
-
-			if (ctx.onComplete !== null) {
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 				ctx.onComplete();
 			}
 		}
@@ -259,10 +203,6 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-<<<<<<< HEAD:src/mill.js
 	module.exports = Mill;
-=======
-	module.exports = CombaMill;
->>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/mill.js
 
 

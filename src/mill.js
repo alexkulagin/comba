@@ -32,16 +32,16 @@
 //┘
 
 
-	function Mill (comba)
+	function Mill (options, queue)
 	{
 
-		const ctx = Object.assign(objectCreate(), comba);
+		const ctx = Object.assign(objectCreate(), options);
 
 
 		// PROPERTIES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.total = ctx.queue.length;
+			ctx.total = queue.length;
 			ctx.pending = ctx.total;
 			ctx.completed = 0;
 
@@ -50,7 +50,7 @@
 		// QUEUE OF TASKS
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.queue = [ ...ctx.queue ];
+			ctx.queue = [ ...queue ];
 
 
 

@@ -31,6 +31,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
+<<<<<<<< HEAD:test/inc/mocha.js
 		const __options =
 		{
 			ui: 'bdd',
@@ -38,6 +39,17 @@
 			slow: 100, timeout: 60000,
 			reporter: Secton
 		};
+========
+//┐  CONTEXT
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+
+	function Comba (options)
+	{
+		return __makelist(options);
+	}
+>>>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/comba.js
 
 
 
@@ -45,7 +57,16 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
+<<<<<<<< HEAD:test/inc/mocha.js
 		const __instance = new Mocha(__options).addFile('./test/entry');
+========
+		Object.defineProperties(Comba,
+		{
+			series: { get: () => (...values) => __makelist({ parallel: false, queue: values }) },
+			parallel: { get: () => (...values) => __makelist({ parallel: true, queue: values }) },
+			make: { get: () => CombaTask.make }
+		});
+>>>>>>>> 88eb21d79e11ce64ea7ac6fc608634eb1df3dbcf:lib/comba.js
 
 
 

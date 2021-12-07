@@ -1,6 +1,6 @@
 {
 	"name": "comba",
-	"version": "2.4.6",
+	"version": "2.4.7",
 	"description": "task runner",
 	"main": "comba.js",
 	"scripts": {

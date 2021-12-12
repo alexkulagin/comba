@@ -93,8 +93,8 @@
 			{
 				value: () =>
 				{
-					if (ctx.onRun) {
-						ctx.onRun();
+					if (ctx.on.run) {
+						ctx.on.run();
 					}
 
 					if (ctx.delay) {
@@ -187,12 +187,12 @@
 				throw new Error ('callback error ' + error);
 			}
 
-			if (ctx.onEnd) {
-				ctx.onEnd();
+			if (ctx.on.end) {
+				ctx.on.end();
 			}
 
-			if (ctx.onComplete) {
-				ctx.onComplete();
+			if (ctx.on.complete) {
+				ctx.on.complete();
 			}
 		}
 

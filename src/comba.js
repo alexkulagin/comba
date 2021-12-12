@@ -24,7 +24,6 @@
 			setPrototypeOf = require('./h/setPrototypeOf'),
 			objectCreate = require('./h/objectCreate'),
 			toDecimal = require('./h/toDecimal'),
-			prefixCap = require('./h/prefixCap'),
 			hasKey = require('./h/hasKey'),
 
 			isInt = require('./h/isInt'),
@@ -68,9 +67,10 @@
 		options.delay = 0;
 		options.interval = 0;
 
-		options.onRun = null;
-		options.onEnd = null;
-		options.onComplete = null;
+		options.on = objectCreate();
+		options.on.run = null;
+		options.on.end = null;
+		options.on.complete = null;
 
 
 		// INSTANCE
@@ -185,8 +185,8 @@
 						{
 							value: (event, handler) =>
 							{
-								if (isFunction(handler) && hasKey(options, prefixCap('on', event))) {
-									options[event] = handler;
+								if (isFunction(handler) && hasKey(options.on, event)) {
+									options.on[event] = handler;
 								}
 
 								return instance;
@@ -243,7 +243,7 @@
 						value: (onComplete) =>
 						{
 							if (isFunction(onComplete)) {
-								options.onComplete = onComplete;
+								options.on.complete = onComplete;
 							}
 
 							new Mill(options, queue).exec();

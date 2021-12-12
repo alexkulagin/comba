@@ -10,7 +10,30 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const { expect, series, parallel, callback, stay } = require('@commons');
+		const { expect, comba, series, parallel, callback, stay } = require('@commons');
+
+
+
+	//┐  TYPE CHECKING
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		describe('TYPE CHECKING', () =>
+		{
+			it('series is function', () => expect(typeof series).to.equal('function'));
+
+			it('parallel is function', () => expect(typeof parallel).to.equal('function'));
+
+			it('comba is function', () => expect(typeof comba).to.equal('function'));
+
+			it('comba() returns instance of CombaList', () =>
+			{
+				let list = comba();
+
+				expect(list.constructor.name).to.equal('CombaList');
+				expect(list).to.not.equal(comba());
+			});
+		});
 
 
 
@@ -407,7 +430,7 @@
 			});
 
 
-			it('series(a,b,listA,listB,c,d).size', () =>
+			it('series(a,b,listA,listB,c,d).total', () =>
 			{
 				const
 					nestedA = series(a,b,c,d,e,f),
@@ -415,7 +438,7 @@
 					listA = series(e,f,d,c,b),
 					listB = parallel(c,d,f,nestedB,nestedA);
 
-				expect(series(a,b,listA,listB,c,d).size).to.equal(28);
+				expect(series(a,b,listA,listB,c,d).total).to.equal(28);
 			});
 		});
 

@@ -219,7 +219,7 @@
 					// GET TOTAL TASKS
 					// ·············································
 
-						size: { get: () => __total(list) },
+						total: { get: () => __total(list) },
 
 
 

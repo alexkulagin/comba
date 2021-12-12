@@ -39,7 +39,7 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Object.defineProperties(dummy(),
+	module.exports = Object.defineProperties((...values) => new CombaList(values, true),
 	{
 
 		// SERIES LIST

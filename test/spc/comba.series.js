@@ -22,11 +22,11 @@
 		{
 			it('series is function', () => expect(typeof series).to.equal('function'));
 
-			it('series() returns instance of Comba', () =>
+			it('series() returns instance of CombaList', () =>
 			{
 				let list = series();
 
-				expect(list.constructor.name).to.equal('Comba');
+				expect(list.constructor.name).to.equal('CombaList');
 				expect(list).to.not.equal(series());
 			});
 		});

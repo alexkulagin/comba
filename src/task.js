@@ -6,13 +6,19 @@
 //┘
 
 
+	//┐  IMPORTS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		const utils = require('./utils');
+
+
+
 	//┐  UTILS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			setPrototypeOf = require('./h/setPrototypeOf'),
-			objectCreate = require('./h/objectCreate');
+		const dummy = utils.dummy;
 
 
 
@@ -20,8 +26,8 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const
-				log = require('./h/log'),
-				error = require('./h/error');
+				log = utils.log,
+				error = utils.error;
 
 
 
@@ -29,7 +35,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const defaultOptions = objectCreate();
+		const defaultOptions = dummy();
 
 
 
@@ -39,10 +45,10 @@
 //┘
 
 
-	function Task (target, options)
+	function CombaTask (target, options)
 	{
 
-		const ctx = objectCreate();
+		const ctx = dummy();
 
 
 
@@ -65,8 +71,8 @@
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.instance = setPrototypeOf(done => ctx.instance.run(done), this);
-			ctx.instance.constructor = Task;
+			ctx.instance = Object.setPrototypeOf(done => ctx.instance.run(done), this);
+			ctx.instance.constructor = CombaTask;
 
 
 
@@ -105,6 +111,17 @@
 					// ·············································
 
 						isTask: { get: () => true }
+
+
+
+				// PRIVATE
+				// ─────────────────────────────────────────────────
+
+
+					// INTERNAL
+					// ·············································
+
+						// _internal: { value: (ƒ) => ƒ(a1, a2) }
 				});
 
 
@@ -129,6 +146,6 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Task;
+	module.exports = CombaTask;
 
 

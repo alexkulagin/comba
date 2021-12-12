@@ -6,14 +6,21 @@
 //┘
 
 
+	//┐  IMPORTS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		const utils = require('./utils');
+
+
+
 	//┐  UTILS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
 		const
-			setPrototypeOf = require('./h/setPrototypeOf'),
-			objectCreate = require('./h/objectCreate'),
-			delay = require('./h/delay');
+			dummy = utils.dummy,
+			delay = utils.delay;
 
 
 
@@ -21,8 +28,8 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const
-				log = require('./h/log'),
-				error = require('./h/error');
+				log = utils.log,
+				error = utils.error;
 
 
 
@@ -32,16 +39,16 @@
 //┘
 
 
-	function Mill (options, queue)
+	function Mill (options, list)
 	{
 
-		const ctx = Object.assign(objectCreate(), options);
+		const ctx = Object.assign(dummy(), options);
 
 
 		// PROPERTIES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.total = queue.length;
+			ctx.total = list.length;
 			ctx.pending = ctx.total;
 			ctx.completed = 0;
 
@@ -50,14 +57,14 @@
 		// QUEUE OF TASKS
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.queue = [ ...queue ];
+			ctx.list = [ ...list ];
 
 
 
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.instance = setPrototypeOf(() => ctx.instance.exec(), this);
+			ctx.instance = Object.setPrototypeOf(() => ctx.instance.exec(), this);
 			ctx.instance.constructor = Mill;
 
 
@@ -121,7 +128,7 @@
 	{
 		if (ctx.isSeries === false)
 		{
-			ctx.queue.some((value, index) =>
+			ctx.list.some((value, index) =>
 			{
 				if (ctx.interval && index > 0) {
 					delay(__next, ctx.interval * index, ctx);
@@ -147,7 +154,7 @@
 		function __next (ctx)
 		{
 			let index = ctx.total - ctx.pending,
-				target = ctx.queue[index],
+				target = ctx.list[index],
 				targetID = 'target_' + index; // temporary dummy
 
 			ctx.pending -= 1;

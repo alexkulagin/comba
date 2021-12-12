@@ -11,7 +11,8 @@
 	//┘
 
 		const
-			Task = require('./task'),
+			utils = require('./utils'),
+			CombaTask = require('./task'),
 			Mill = require('./mill');
 
 
@@ -21,16 +22,15 @@
 	//┘
 
 		const
-			setPrototypeOf = require('./h/setPrototypeOf'),
-			objectCreate = require('./h/objectCreate'),
-			toDecimal = require('./h/toDecimal'),
-			hasKey = require('./h/hasKey'),
+			dummy = utils.dummy,
+			toDecimal = utils.toDecimal,
+			hasKey = utils.hasKey,
 
-			isInt = require('./h/isInt'),
-			isFunction = require('./h/isFunction'),
-			isAsyncFunction = require('./h/isAsyncFunction'),
-			isArray = require('./h/isArray'),
-			isPlain = require('./h/isPlain');
+			isInt = utils.isInt,
+			isFunction = utils.isFunction,
+			isAsyncFunction = utils.isAsyncFunction,
+			isArray = utils.isArray,
+			isPlain = utils.isPlain;
 
 
 
@@ -38,8 +38,8 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const
-				log = require('./h/log'),
-				error = require('./h/error');
+				log = utils.log,
+				error = utils.error;
 
 
 
@@ -49,17 +49,17 @@
 //┘
 
 
-	function Comba (tasks, isSeries)
+	function CombaList (tasks, isSeries)
 	{
 
 		// QUEUE
 		
-		const queue = __make(tasks);
+		const list = __make(tasks);
 
 
 		// OPTIONS
 		
-		const options = objectCreate();
+		const options = dummy();
 
 		options.isSeries = isSeries;
 
@@ -67,7 +67,7 @@
 		options.delay = 0;
 		options.interval = 0;
 
-		options.on = objectCreate();
+		options.on = dummy();
 		options.on.run = null;
 		options.on.end = null;
 		options.on.complete = null;
@@ -75,15 +75,14 @@
 
 		// INSTANCE
 		
-		const instance = setPrototypeOf(callback => instance.run(callback), ((!this || !(this instanceof Comba)) ? objectCreate() : this));
+		const instance = Object.setPrototypeOf(callback => instance.run(callback), ((!this || !(this instanceof CombaList)) ? dummy() : this));
 
-		instance.constructor = Comba;
+		instance.constructor = CombaList;
 
 
-		return __interface(instance, options, queue);
+		return __interface(instance, options, list);
 
 	}
-
 
 
 
@@ -91,7 +90,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __interface (instance, options, queue)
+		function __interface (instance, options, list)
 		{
 
 			const { isSeries } = options;
@@ -153,8 +152,8 @@
 						{
 							value: (...values) =>
 							{
-								if (values.length) {
-									queue.push(...__make(values));
+								if (values && values.length) {
+									list.push(...__make(values));
 								}
 
 								return instance;
@@ -169,8 +168,8 @@
 						{
 							value: (...values) =>
 							{
-								if (values.length) {
-									queue.unshift(...__make(values));
+								if (values && values.length) {
+									list.unshift(...__make(values));
 								}
 
 								return instance;
@@ -208,19 +207,19 @@
 					// GET TASKS
 					// ·············································
 
-						tasks: { get: () => [ ...queue ] },
+						tasks: { get: () => [ ...list ] },
 
 
 					// GET QUEUE LENGTH
 					// ·············································
 
-						length: { get: () => queue.length },
+						length: { get: () => list.length },
 
 
 					// GET TOTAL TASKS
 					// ·············································
 
-						size: { get: () => __total(queue) },
+						size: { get: () => __total(list) },
 
 
 
@@ -231,7 +230,7 @@
 					// INTERNAL
 					// ·············································
 
-						_internal: { value: (ƒ) => ƒ(options, queue) },
+						_internal: { value: (ƒ) => ƒ(options, list) },
 
 
 
@@ -246,7 +245,7 @@
 								options.on.complete = onComplete;
 							}
 
-							new Mill(options, queue).exec();
+							new Mill(options, list).exec();
 						}
 					}
 			});
@@ -258,100 +257,100 @@
 
 
 
-
-	//┐  MAKE TASKS
+	//┐  LIST MAKER
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __make (...values)
+		const __make = (...values) =>
 		{
-			const tasks = [];
+			const list = [];
 
 			if (!values.length) {
-				return tasks;
+				return list;
 			}
 
 			if (values.length === 1) {
-				return __prepare(values[0], tasks);
+				return __prepare(values[0], list);
 			}
 
-			return __prepare(values, tasks);
-		}
+			return __prepare(values, list);
+		};
 
 
 
-		// PREPARING
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			function __prepare (values, tasks)
-			{
-
-				if (!values) {
-					// error
-				}
-
-
-				// PUSH COMBA LIST OR COMBA TASK
-				// ─────────────────────────────────────────────────
-
-					if (values.isList || values.isTask) {
-						tasks.push(values);
-					}
-
-
-				// PUSH FUNCTION
-				// ─────────────────────────────────────────────────
-
-					else if (isFunction(values) || isAsyncFunction(values)) {
-						tasks.push(new Task(values));
-					}
-
-
-				// EACH ARRAY VALUES
-				// ─────────────────────────────────────────────────
-
-					else if (isArray(values))
-					{
-						if (!values.length) {
-							// error
-						}
-
-						values.forEach(value => __prepare(value, tasks));
-					}
-
-
-				// EACH OBJECT KEYS
-				// ─────────────────────────────────────────────────
-
-					else if (isPlain(values))
-					{
-						const keys = Object.keys(values);
-
-						if (!keys.length) {
-							// error
-						}
-
-						keys.forEach(key => __prepare(values[key], tasks));
-					}
-
-
-				return tasks;
-			}
-
-
-
-
-	//┐  GET TOTAL
+	//┐  LIST PREPARING
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __total (queue)
+		const __prepare = (values, list) =>
+		{
+
+			if (!values) {
+				// error
+			}
+
+
+			// PUSH COMBA LIST OR COMBA TASK
+			// ─────────────────────────────────────────────────
+
+				if (values.isList || values.isTask) {
+					list.push(values);
+				}
+
+
+			// PUSH FUNCTION
+			// ─────────────────────────────────────────────────
+
+				else if (isFunction(values) || isAsyncFunction(values)) {
+					list.push(new CombaTask(values));
+				}
+
+
+			// EACH ARRAY VALUES
+			// ─────────────────────────────────────────────────
+
+				else if (isArray(values))
+				{
+					if (!values.length) {
+						// error
+					}
+
+					values.forEach(value => __prepare(value, list));
+				}
+
+
+			// EACH OBJECT KEYS
+			// ─────────────────────────────────────────────────
+
+				else if (isPlain(values))
+				{
+					const keys = Object.keys(values);
+
+					if (!keys.length) {
+						// error
+					}
+
+					keys.forEach(key => __prepare(values[key], list));
+				}
+
+
+			return list;
+		};
+
+
+
+
+	//┐  GET TOTAL TASKS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		function __total (list)
 		{
 			let total = 0;
 
-			if (queue.length)
+			if (list.length)
 			{
-				queue.forEach(task =>
+				list.forEach(task =>
 				{
 					if (task.isTask) {
 						total += 1;
@@ -373,23 +372,6 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Object.defineProperties(objectCreate(),
-	{
-
-		// SERIES LIST
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			series: {
-				get: () => (...values) => new Comba(values, true)
-			},
-
-
-		// PARALLEL LIST
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			parallel: {
-				get: () => (...values) => new Comba(values, false)
-			}
-	});
+	module.exports = CombaList;
 
 

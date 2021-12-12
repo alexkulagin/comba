@@ -35,7 +35,7 @@
 
 		const build =
 		{
-			input: 'src/comba.js',
+			input: 'src/',
 
 			output:
 			{
@@ -62,7 +62,7 @@
 				{
 					mangle: {
 						toplevel: true,
-						reserved: ['Comba']
+						reserved: ['Comba', 'CombaList', 'CombaTask']
 					},
 
 					sourcemap: true

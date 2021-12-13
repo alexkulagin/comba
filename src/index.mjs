@@ -10,27 +10,18 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			utils = require('./utils'),
-			CombaTask = require('./task'),
-			CombaList = require('./list');
+		import CombaTask from './task.mjs';
+		import CombaList from './list.mjs';
+
+		import { dummy, log, error } from './utils.mjs';
 
 
 
-	//┐  UTILS
+	//┐  MAKE COMBA LIST
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const dummy = utils.dummy;
-
-
-
-		// DEBUGGING
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			const
-				log = utils.log,
-				error = utils.error;
+		const __make = (isSeries = false) => (...tasks) => new CombaList(tasks, isSeries);
 
 
 
@@ -39,14 +30,14 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Object.defineProperties((...values) => new CombaList(values, true),
+	export default Object.defineProperties(__make(true),
 	{
 
 		// SERIES LIST
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			series: {
-				get: () => (...values) => new CombaList(values, true)
+				get: () => __make(true)
 			},
 
 
@@ -54,7 +45,7 @@
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			parallel: {
-				get: () => (...values) => new CombaList(values, false)
+				get: () => __make()
 			},
 
 

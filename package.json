@@ -1,13 +1,13 @@
 {
 	"name": "comba",
-	"version": "2.4.13",
+	"version": "2.4.14",
 	"description": "task runner",
 	"main": "comba.js",
 	"scripts": {
 		"build": "rollup -c && npm run test",
 		"build.dev": "NODE_ENV=development rollup -c",
 		"build.watch": "NODE_ENV=development rollup -c -w",
-		"test": "node ./test/index"
+		"test": "node ./test/index.cjs"
 	},
 	"keywords": [],
 	"homepage": "https://github.com/alexkulagin/comba#readme",
@@ -24,7 +24,7 @@
 		"node": ">=10"
 	},
 	"devDependencies": {
-		"module-alias": "^2.2.0",
+		"module-alias": "^2.2.2",
 		"mocha": "^6.2.0",
 		"chai": "^4.2.0",
 		"chai-arrays": "^2.0.0",
@@ -35,8 +35,5 @@
 		"rollup-plugin-commonjs": "^10.0.1",
 		"rollup-plugin-sourcemaps": "^0.4.2",
 		"rollup-plugin-node-resolve": "^5.2.0"
-	},
-	"files": [
-		"lib"
-	]
+	}
 }

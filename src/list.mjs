@@ -10,36 +10,19 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			utils = require('./utils'),
-			CombaTask = require('./task'),
-			Mill = require('./mill');
+		import CombaTask from './task.mjs';
+		import CombaMill from './mill.mjs';
+
+		import { dummy, toDecimal, hasKey, isInt, isFunction, isAsyncFunction, isArray, isPlain, log, error } from './utils.mjs';
 
 
 
-	//┐  UTILS
+	//┐  EVENTS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			dummy = utils.dummy,
-			toDecimal = utils.toDecimal,
-			hasKey = utils.hasKey,
-
-			isInt = utils.isInt,
-			isFunction = utils.isFunction,
-			isAsyncFunction = utils.isAsyncFunction,
-			isArray = utils.isArray,
-			isPlain = utils.isPlain;
-
-
-
-		// DEBUGGING
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			const
-				log = utils.log,
-				error = utils.error;
+		import Dispatcher from './event/dispatcher.mjs';
+		import Event from './event/events.mjs';		
 
 
 
@@ -52,25 +35,20 @@
 	function CombaList (tasks, isSeries)
 	{
 
-		// QUEUE
-		
-		const list = __make(tasks);
+		const
+			list = __make(tasks),
+			options = dummy();
 
 
 		// OPTIONS
 		
-		const options = dummy();
-
 		options.isSeries = isSeries;
 
 		options.limit = 0;
 		options.delay = 0;
 		options.interval = 0;
 
-		options.on = dummy();
-		options.on.run = null;
-		options.on.end = null;
-		options.on.complete = null;
+		options.dispatcher = new Dispatcher();
 
 
 		// INSTANCE
@@ -184,8 +162,8 @@
 						{
 							value: (event, handler) =>
 							{
-								if (isFunction(handler) && hasKey(options.on, event)) {
-									options.on[event] = handler;
+								if (isFunction(handler)) {
+									options.dispatcher.on(event, handler);
 								}
 
 								return instance;
@@ -242,10 +220,10 @@
 						value: (onComplete) =>
 						{
 							if (isFunction(onComplete)) {
-								options.on.complete = onComplete;
+								options.dispatcher.on(Event.COMPLETE, onComplete);
 							}
 
-							new Mill(options, list).exec();
+							new CombaMill(options, list).exec();
 						}
 					}
 			});
@@ -372,6 +350,6 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = CombaList;
+	export default CombaList;
 
 

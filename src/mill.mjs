@@ -10,26 +10,15 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const utils = require('./utils');
+		import { dummy, delay, log, error } from './utils.mjs';
 
 
 
-	//┐  UTILS
+	//┐  EVENTS
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const
-			dummy = utils.dummy,
-			delay = utils.delay;
-
-
-
-		// DEBUGGING
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			const
-				log = utils.log,
-				error = utils.error;
+		import Event from './event/events.mjs';	
 
 
 
@@ -39,7 +28,7 @@
 //┘
 
 
-	function Mill (options, list)
+	function CombaMill (options, list)
 	{
 
 		const ctx = Object.assign(dummy(), options);
@@ -65,7 +54,7 @@
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			ctx.instance = Object.setPrototypeOf(() => ctx.instance.exec(), this);
-			ctx.instance.constructor = Mill;
+			ctx.instance.constructor = CombaMill;
 
 
 		return __interface(ctx);
@@ -100,9 +89,7 @@
 			{
 				value: () =>
 				{
-					if (ctx.on.run) {
-						ctx.on.run();
-					}
+					ctx.dispatcher.send(Event.RUN)
 
 					if (ctx.delay) {
 						delay(__exec, ctx.delay, ctx);
@@ -194,13 +181,9 @@
 				throw new Error ('callback error ' + error);
 			}
 
-			if (ctx.on.end) {
-				ctx.on.end();
-			}
-
-			if (ctx.on.complete) {
-				ctx.on.complete();
-			}
+			ctx.dispatcher.send(Event.END);
+			ctx.dispatcher.send(Event.DONE);
+			ctx.dispatcher.send(Event.COMPLETE);
 		}
 
 
@@ -210,6 +193,6 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	module.exports = Mill;
+	export default CombaMill;
 
 

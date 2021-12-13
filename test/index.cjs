@@ -22,9 +22,9 @@
 
 		[{
 			'@spc': $('spc'),
-			'@comba': $('..', 'comba'),
-			'@commons': $('inc', 'commons'),
-			'@mocha': $('inc', 'mocha')
+			'@comba': $('..', 'comba.js'),
+			'@commons': $('inc', 'commons.cjs'),
+			'@mocha': $('inc', 'mocha.cjs')
 
 		}].forEach(alias => reg.addAliases(alias));
 

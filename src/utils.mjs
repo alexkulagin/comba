@@ -10,7 +10,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const typeOf = value => toString.call(value);
+		export const typeOf = value => toString.call(value);
 
 
 
@@ -18,7 +18,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const dummy = (proto = null, prop) => Object.create(proto, prop);
+		export const dummy = (proto = null, prop) => Object.create(proto, prop);
 
 
 
@@ -26,7 +26,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const hasKey = (target, key) => Object.prototype.hasOwnProperty.call(target, key);
+		export const hasKey = (target, key) => Object.prototype.hasOwnProperty.call(target, key);
 
 
 
@@ -34,7 +34,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const toDecimal = (value, min) => ((value > 0) ? (value * ((value < min) ? 1000 : 1)) : 0);
+		export const toDecimal = (value, min) => ((value > 0) ? (value * ((value < min) ? 1000 : 1)) : 0);
 
 
 
@@ -42,7 +42,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const delay = (ƒ, t, ...values) => setTimeout(ƒ, t || 0, ...values);
+		export const delay = (ƒ, t, ...values) => setTimeout(ƒ, t || 0, ...values);
 
 
 
@@ -53,43 +53,43 @@
 		// IS Number
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isNumber = value => typeOf(value) === '[object Number]';
+			export const isNumber = value => typeOf(value) === '[object Number]';
 
 
 		// IS INT
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isInt = value => isNumber(value) && value > 0 && Number.isInteger(value);
+			export const isInt = value => isNumber(value) && value > 0 && Number.isInteger(value);
 
 
 		// IS FUNCTION
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isFunction = value => typeOf(value) === '[object Function]';
+			export const isFunction = value => typeOf(value) === '[object Function]';
 
 
 		// IS ASYNC FUNCTION
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isAsyncFunction = value => typeOf(value) === '[object AsyncFunction]';
+			export const isAsyncFunction = value => typeOf(value) === '[object AsyncFunction]';
 
 
 		// IS ARRAY
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isArray = value => Array.isArray(value);
+			export const isArray = value => Array.isArray(value);
 
 
 		// IS OBJECT
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isObject = value => typeOf(value) === '[object Object]';
+			export const isObject = value => typeOf(value) === '[object Object]';
 
 
 		// IS PLAIN
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const isPlain = (value) =>
+			export const isPlain = (value) =>
 			{
 				if (!value || !isObject(value)) {
 					return false;
@@ -115,90 +115,13 @@
 		// LOGGER
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const log = (...values) => console.log(...values);
+			export const log = (...values) => console.log(...values);
 
 
 		// ERROR MESSAGE
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			const error = (...e) => new Error(`⛔️ ${ e.join(' ') }\n`);
+			export const error = (...e) => new Error(`⛔️ ${ e.join(' ') }\n`);
 
-
-
-
-//┐  EXPORTS
-//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-//┘
-
-	module.exports = Object.defineProperties(dummy(),
-	{
-
-		// DUMMY OBJECT
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			dummy: {
-				get: () => dummy
-			},
-
-
-		// CHECKS
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			isInt: {
-				get: () => isInt
-			},
-
-			isFunction: {
-				get: () => isFunction
-			},
-
-			isAsyncFunction: {
-				get: () => isAsyncFunction
-			},
-
-			isArray: {
-				get: () => isArray
-			},
-
-			isPlain: {
-				get: () => isPlain
-			},
-
-
-		// DEBUGGING
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			log: {
-				get: () => log
-			},
-
-			error: {
-				get: () => error
-			},
-
-
-		// HAS KEY
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			hasKey: {
-				get: () => hasKey
-			},
-
-
-		// TO DECIMAL
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			toDecimal: {
-				get: () => toDecimal
-			},
-
-
-		// DELAY
-		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-
-			delay: {
-				get: () => delay
-			}
-	});
 
 

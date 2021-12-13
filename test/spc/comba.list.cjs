@@ -328,6 +328,26 @@
 					expect(array).to.be.equalTo(['a','e','d','c']), next()
 				});
 			});
+
+
+			it('series(a,b,c).on(\'done\',handler).run(complete)', (next) =>
+			{
+				array.length = 0;
+
+				series(a,b,c).on('done',() => expect(array.length).to.equal(3)).run(() => {
+					expect(array).to.be.equalTo(['a','b','c']), next()
+				});
+			});
+
+
+			it('parallel(a,c,d,e).on(\'done\',handler).run(complete)', (next) =>
+			{
+				array.length = 0;
+
+				parallel(a,c,d,e).on('done',() => expect(array.length).to.equal(4)).run(() => {
+					expect(array).to.be.equalTo(['a','e','d','c']), next()
+				});
+			});
 		});
 
 

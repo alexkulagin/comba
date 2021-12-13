@@ -15,7 +15,7 @@
 			Chai = require('chai'),
 			ChaiArrays = require('chai-arrays'),
 
-			Secton = require('./secton');
+			Secton = require('./secton.cjs');
 
 
 
@@ -45,7 +45,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const __instance = new Mocha(__options).addFile('./test/entry');
+		const __instance = new Mocha(__options).addFile('./test/entry.cjs');
 
 
 

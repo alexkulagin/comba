@@ -21,7 +21,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		const __make = (isSeries = false) => (...tasks) => new CombaList(tasks, isSeries);
+		//const __make = (isSeries = false) => (...tasks) => new CombaList(tasks, isSeries);
 
 
 
@@ -30,14 +30,25 @@
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	export default Object.defineProperties(__make(true),
+	const series = (...tasks) => new CombaList(tasks, true);
+	const parallel = (...tasks) => new CombaList(tasks, false);
+	const task = (target, options) => new CombaTask(target, options);
+
+
+
+
+//┐  EXPORTS
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+	export default Object.defineProperties((...tasks) => new CombaList(tasks, true),
 	{
 
 		// SERIES LIST
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			series: {
-				get: () => __make(true)
+				get: () => series
 			},
 
 
@@ -45,7 +56,7 @@
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			parallel: {
-				get: () => __make()
+				get: () => parallel
 			},
 
 
@@ -53,7 +64,7 @@
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
 			task: {
-				get: () => (target, options) => new CombaTask(target, options)
+				get: () => task
 			}
 	});
 

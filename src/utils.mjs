@@ -121,7 +121,10 @@
 		// ERROR MESSAGE
 		// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 
-			export const error = (...e) => new Error(`⛔️ ${ e.join(' ') }\n`);
+			// export const __error = (...e) => new Error(`⛔️ ${ e.join(' ') }\n`);
+			Object.defineProperty(log, 'error', {
+				value: (...e) => new Error(`⛔️ ${ e.join(' ') }\n`)
+			});
 
 
 

@@ -13,7 +13,7 @@
 		import CombaTask from './task.mjs';
 		import CombaMill from './mill.mjs';
 
-		import { dummy, toDecimal, hasKey, isInt, isFunction, isAsyncFunction, isArray, isPlain, log, error } from './utils.mjs';
+		import { dummy, toDecimal, hasKey, isInt, isFunction, isAsyncFunction, isArray, isObject, isPlain, log } from './utils.mjs';
 
 
 
@@ -22,7 +22,23 @@
 	//┘
 
 		import Dispatcher from './event/dispatcher.mjs';
-		import Event from './event/events.mjs';		
+		import Event from './event/events.mjs';
+
+
+
+	//┐  DEFAULT OPTIONS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		/*const defaultOptions =
+		{
+			isParallel: null,
+			limit: 0,
+			delay: 0,
+			interval: 0,
+
+			tasks: null
+		};*/
 
 
 
@@ -32,33 +48,15 @@
 //┘
 
 
-	function CombaList (tasks, isSeries)
+	function CombaList (tasks, isParallel = false)
 	{
-
-		const
-			list = __make(tasks),
-			options = dummy();
-
-
-		// OPTIONS
-		
-		options.isSeries = isSeries;
-
-		options.limit = 0;
-		options.delay = 0;
-		options.interval = 0;
-
-		options.dispatcher = new Dispatcher();
-
-
 		// INSTANCE
 		
 		const instance = Object.setPrototypeOf(callback => instance.run(callback), ((!this || !(this instanceof CombaList)) ? dummy() : this));
-
 		instance.constructor = CombaList;
 
 
-		return __interface(instance, options, list);
+		return __interface(instance, tasks, isParallel);
 
 	}
 
@@ -68,10 +66,20 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __interface (instance, options, list)
+		function __interface (instance, tasks, isParallel)
 		{
 
-			const { isSeries } = options;
+			// options = (!!options && isObject(options)) ? { ...defaultOptions, ...options } : defaultOptions;
+
+			const list = __make(tasks);
+			const dispatcher = new Dispatcher();
+			const props = dummy();
+
+
+			props.isParallel = isParallel;
+			props.limit = 0;
+			props.delay = 0;
+			props.interval = 0;
 
 
 			Object.defineProperties(instance,
@@ -88,7 +96,7 @@
 						{
 							value: (value) =>
 							{
-								options.limit = (!isSeries && isInt(value)) ? value : 0;
+								props.limit = (isParallel && isInt(value)) ? value : props.limit;
 
 								return instance;
 							}
@@ -102,7 +110,7 @@
 						{
 							value: (value) =>
 							{
-								options.delay = (isInt(value)) ? value : 0;
+								props.delay = (isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -116,7 +124,7 @@
 						{
 							value: (value) =>
 							{
-								options.interval = toDecimal(value);
+								props.interval = toDecimal(value);
 
 								return instance;
 							}
@@ -130,7 +138,7 @@
 						{
 							value: (...values) =>
 							{
-								if (values && values.length) {
+								if (values.length) {
 									list.push(...__make(values));
 								}
 
@@ -146,7 +154,7 @@
 						{
 							value: (...values) =>
 							{
-								if (values && values.length) {
+								if (values.length) {
 									list.unshift(...__make(values));
 								}
 
@@ -163,7 +171,7 @@
 							value: (event, handler) =>
 							{
 								if (isFunction(handler)) {
-									options.dispatcher.on(event, handler);
+									dispatcher.on(event, handler);
 								}
 
 								return instance;
@@ -208,7 +216,7 @@
 					// INTERNAL
 					// ·············································
 
-						_internal: { value: (ƒ) => ƒ(options, list) },
+						_internal: { value: (ƒ) => ƒ(/*options, */list, instance, dispatcher) },
 
 
 
@@ -220,10 +228,10 @@
 						value: (onComplete) =>
 						{
 							if (isFunction(onComplete)) {
-								options.dispatcher.on(Event.COMPLETE, onComplete);
+								dispatcher.on(Event.COMPLETE, onComplete);
 							}
 
-							new CombaMill(options, list).exec();
+							new CombaMill(list, dispatcher, props).run();
 						}
 					}
 			});

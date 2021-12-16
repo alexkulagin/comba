@@ -13,35 +13,19 @@
 		import CombaTask from './task.mjs';
 		import CombaList from './list.mjs';
 
-		import { dummy, log, error } from './utils.mjs';
 
 
 
-	//┐  MAKE COMBA LIST
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		//const __make = (isSeries = false) => (...tasks) => new CombaList(tasks, isSeries);
-
-
-
-
-//┐  EXPORTS
+//┐  COMBA
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	const series = (...tasks) => new CombaList(tasks, true);
-	const parallel = (...tasks) => new CombaList(tasks, false);
+	const series = (...tasks) => new CombaList(tasks);
+	const parallel = (...tasks) => new CombaList(tasks, true);
 	const task = (target, options) => new CombaTask(target, options);
 
 
-
-
-//┐  EXPORTS
-//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-//┘
-
-	export default Object.defineProperties((...tasks) => new CombaList(tasks, true),
+	const comba = Object.defineProperties(series,
 	{
 
 		// SERIES LIST
@@ -66,6 +50,16 @@
 			task: {
 				get: () => task
 			}
+
 	});
+
+
+
+
+//┐  EXPORTS
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+	export default comba;
 
 

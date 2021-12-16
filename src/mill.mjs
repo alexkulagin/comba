@@ -10,7 +10,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		import { dummy, delay, log, error } from './utils.mjs';
+		import { dummy, delay, log } from './utils.mjs';
 
 
 
@@ -28,162 +28,162 @@
 //┘
 
 
-	function CombaMill (options, list)
+	function CombaMill (list, dispatcher, props)
 	{
-
-		const ctx = Object.assign(dummy(), options);
 
 
 		// PROPERTIES
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.total = list.length;
-			ctx.pending = ctx.total;
-			ctx.completed = 0;
-
-
-
-		// QUEUE OF TASKS
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			ctx.list = [ ...list ];
-
+			list = [ ...list ];
 
 
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.instance = Object.setPrototypeOf(() => ctx.instance.exec(), this);
-			ctx.instance.constructor = CombaMill;
+			const instance = Object.setPrototypeOf(() => instance.run(), this);
+			instance.constructor = CombaMill;
 
 
-		return __interface(ctx);
+		return __interface(instance, list, dispatcher, props);
 	}
 
 
 
-
-//┐  INTERFACE
-//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-//┘
-
-
-	function __interface (ctx)
-	{
-
-		const instance = ctx.instance;
-
-
-
-		// CHAINABLE METHODS
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			Object.defineProperties(instance, {});
-
-
-
-		// EXECUTION
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			Object.defineProperty(instance, 'exec',
-			{
-				value: () =>
-				{
-					ctx.dispatcher.send(Event.RUN)
-
-					if (ctx.delay) {
-						delay(__exec, ctx.delay, ctx);
-					}
-
-					else __exec(ctx);
-				}
-			});
-
-
-		return instance;
-	}
-
-
-
-
-//┐  EXECUTION
-//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-//┘
-
-
-	function __exec (ctx)
-	{
-		if (ctx.isSeries === false)
-		{
-			ctx.list.some((value, index) =>
-			{
-				if (ctx.interval && index > 0) {
-					delay(__next, ctx.interval * index, ctx);
-				}
-
-				else __next(ctx);
-
-				if (ctx.limit && index >= (ctx.limit - 1)) {
-					return true;
-				}
-			});
-		}
-
-		else __next(ctx);
-	}
-
-
-
-	//┐  NEXT TASK
+	//┐  INTERFACE
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __next (ctx)
+		function __interface (instance, list, dispatcher, props)
 		{
-			let index = ctx.total - ctx.pending,
-				target = ctx.list[index],
-				targetID = 'target_' + index; // temporary dummy
 
-			ctx.pending -= 1;
+			let $total = list.length,
+				$pending = $total,
+				$completed = 0,
 
-			const done = (error = null) =>
+				$isParallel = props.isParallel,
+				$limit = props.limit,
+				$delay = props.delay,
+				$interval = props.interval;
+
+
+			Object.defineProperties(instance,
 			{
-				ctx.completed += 1;
 
-				if (ctx.total === ctx.completed || error) {
-					return __complete(ctx, error);
-				}
+				// CHAINABLE METHODS
+				// ─────────────────────────────────────────────────
+
+				
+					// PARALLEL LIMIT
+					// ·············································
+					
+						/*limit:
+						{
+							value: (value) =>
+							{
+								options.limit = (!isSeries && isInt(value)) ? value : 0;
+
+								return instance;
+							}
+						}*/
 
 
-				if (ctx.pending > 0 && (ctx.isSeries || !ctx.isSeries && ctx.limit > 0 && ctx.limit < ctx.total))
-				{
-					if (ctx.interval) {
-						return delay(__next, ctx.interval, ctx);
+				// EXECUTION
+				// ─────────────────────────────────────────────────
+
+				
+					run:
+					{
+						value: () =>
+						{
+							dispatcher.send(Event.RUN);
+
+							if ($delay) {
+								delay(instance.exec, $delay);
+							}
+
+							else instance.exec();
+						}
+					},
+
+
+					exec:
+					{
+						value: () =>
+						{
+							if ($isParallel)
+							{
+								list.some((value, index) =>
+								{
+									if ($interval && index > 0) {
+										delay(instance.next, $interval * index);
+									}
+
+									else instance.next();
+
+									if ($limit && index >= ($limit - 1)) {
+										return true;
+									}
+								});
+							}
+
+							else instance.next();
+						}
+					},
+
+
+					next:
+					{
+						value: () =>
+						{
+							let index = $total - $pending,
+								target = list[index],
+								targetID = 'target_' + index; // temporary dummy
+
+							$pending -= 1;
+
+							const done = (error = null) =>
+							{
+								$completed += 1;
+
+								if ($total === $completed || error) {
+									return instance.complete(error);
+								}
+
+								if ($pending > 0 && (!$isParallel || $isParallel && $limit > 0 && $limit < $total))
+								{
+									if ($interval) {
+										return delay(instance.next, $interval);
+									}
+
+									else return instance.next();
+								}
+							};
+
+
+							target.run(done);
+						}
+					},
+
+
+					complete:
+					{
+						value: (error) =>
+						{
+							if (error) {
+								throw log.error(error);//new Error ('callback error ' + error);
+							}
+
+							dispatcher.send(Event.END);
+							dispatcher.send(Event.DONE);
+							dispatcher.send(Event.COMPLETE);
+						}
 					}
 
-					else return __next(ctx);
-				}
-			};
+			});
 
 
-			target.run(done);
-		}
-
-
-
-	//┐  COMPLETE
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		function __complete (ctx, error)
-		{
-			if (error) {
-				throw new Error ('callback error ' + error);
-			}
-
-			ctx.dispatcher.send(Event.END);
-			ctx.dispatcher.send(Event.DONE);
-			ctx.dispatcher.send(Event.COMPLETE);
+			return instance;
 		}
 
 

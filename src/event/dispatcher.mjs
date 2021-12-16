@@ -9,154 +9,143 @@
 
 
 
-	//┐  DISPATCHER
-	//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┐  CONSTRUCTOR
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+
+	function CombaDispatcher ()
+	{
+
+		// INSTANCE
+		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
+			const instance = Object.setPrototypeOf((event, ...args) => instance.send(event, ...args), this);
+			instance.constructor = CombaDispatcher;
+
+
+		return __interface(instance);
+	}
+
+
+
+	//┐  INTERFACE
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		/**
-		 * @constructor
-		 * Вещатель событий
-		 */
-		const Dispatcher = function ()
+		function __interface (instance)
 		{
-			this.listeners = {};
-		},
+			let $listeners = {};
 
-		__ = Dispatcher.prototype;
-
-
-
-
-	//┐  PUBLIC API
-	//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-	//┘
-
-
-		//┐  LISTENERS
-		//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-		//┘
-
-			/**
-			 * @public
-			 * Добавляет слушателя
-			 * @param {string} event - название события
-			 * @param {function} handler - функция обработчик
-			 * @param {boolean} once - слушатель удалится после первого запуска
-			 * @return {void}
-			 */
-			__.on = function (event, handler, once)
+			Object.defineProperties(instance,
 			{
-				if (!this.listeners.hasOwnProperty(event)) {
-					this.listeners[event] = [];
-				}
 
-				this.listeners[event].push({ handler: handler, once: once });
-			};
-
-
-			/**
-			 * @public
-			 * Добавляет слушателя, удаляющегося после запуска
-			 * @param {string} event - название события
-			 * @param {function} handler - функция обработчик
-			 * @return {void}
-			 */
-			__.once = function (event, handler)
-			{
-				this.on(event, handler, true);
-			};
-
-
-			/**
-			 * @public
-			 * Удаляет слушателя
-			 * @param {string} event - название события
-			 * @param {?function} handler - функция обработчик
-			 * @return {void}
-			 */
-			__.off = function (event, handler)
-			{
-				if (event === undefined && handler === undefined)
+				on:
 				{
-					this.listeners = {};
-					return;
-				}
-
-				if (this.listeners.hasOwnProperty(event) === false) {
-					return;
-				}
-
-				if (handler === undefined || handler === null)
-				{
-					delete this.listeners[event];
-					return;
-				}
-
-				else if (isFunction(handler) === false) {
-					return;
-				}
-
-				let list = this.listeners[event], item,
-					i = 0;
-
-				for (i; i < list.length; i++)
-				{
-					item = list[i];
-
-					if (item !== null && item.handler === handler) {
-						list[i] = null;
-					}
-				}
-			};
-
-
-
-		//┐  BROADCASTING
-		//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-		//┘
-
-			/**
-			 * @public
-			 * Рассылает событие
-			 * @param {string} event - название события
-			 * @param {?array} args - аргументы
-			 * @return {void}
-			 */
-			__.send = function (event, ...args)
-			{
-				if (event === undefined || this.listeners.hasOwnProperty(event) === false) {
-					return;
-				}
-
-				let list = this.listeners[event],
-					len = list.length,
-					i = 0,
-
-					item;
-
-				for (i; i < len; i++)
-				{
-					item = list[i];
-
-					if (item !== null)
+					value: (event, handler, once) =>
 					{
-						item.handler.apply(this, args);
+						if (!$listeners.hasOwnProperty(event)) {
+							$listeners[event] = [];
+						}
 
-						if (item.once === true) {
-							list[i] = null;
+						$listeners[event].push({ handler: handler, once: once });
+					}
+				},
+
+
+				once:
+				{
+					value: (event, handler) =>
+					{
+						instance.on(event, handler, true);
+					}
+				},
+
+
+				off:
+				{
+					value: (event, handler) =>
+					{
+						if (event === undefined && handler === undefined)
+						{
+							$listeners = {};
+							return;
+						}
+
+						if (!$listeners.hasOwnProperty(event)) {
+							return;
+						}
+
+						if (!handler)
+						{
+							delete $listeners[event];
+							return;
+						}
+
+						else if (!isFunction(handler)) {
+							return;
+						}
+
+						let list = $listeners[event],
+							item, i = 0;
+
+						for (i; i < list.length; i++)
+						{
+							item = list[i];
+
+							if (item !== null && item.handler === handler) {
+								list[i] = null;
+							}
+						}
+					}
+				},
+
+
+				send:
+				{
+					value: (event, ...args) =>
+					{
+						if (event === undefined || !$listeners.hasOwnProperty(event)) {
+							return;
+						}
+
+						let list = $listeners[event],
+							len = list.length,
+							i = 0,
+
+							item;
+
+						for (i; i < len; i++)
+						{
+							item = list[i];
+
+							if (item !== null)
+							{
+								item.handler.apply(instance, args);
+
+								if (item.once === true) {
+									list[i] = null;
+								}
+							}
 						}
 					}
 				}
-			};
+
+
+			});
+
+
+			return instance;
+		}
 
 
 
 
-	//┐  EXPORTS
+	//┐  EXPORT
 	//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 	//┘
 
-		export default Dispatcher;
+		export default CombaDispatcher;
 
 
 

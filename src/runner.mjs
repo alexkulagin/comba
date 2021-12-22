@@ -1,7 +1,7 @@
 'use strict';
 
 
-//┐  COMBA MILL
+//┐  COMBA RUNNER
 //╠──███████████████████████████████████████████████████████████████████████████
 //┘
 
@@ -10,15 +10,7 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		import { dummy, delay, log } from './utils.mjs';
-
-
-
-	//┐  EVENTS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		import Event from './event/events.mjs';	
+		import { isString, dummy, hasKey, delay, log } from './utils.mjs';
 
 
 
@@ -28,24 +20,17 @@
 //┘
 
 
-	function CombaMill (list, dispatcher, props)
+	function CombaRunner (list, props)
 	{
-
-
-		// PROPERTIES
-		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-			list = [ ...list ];
-
 
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 			const instance = Object.setPrototypeOf(() => instance.run(), this);
-			instance.constructor = CombaMill;
+			instance.constructor = CombaRunner;
 
 
-		return __interface(instance, list, dispatcher, props);
+		return __interface(instance, list, props);
 	}
 
 
@@ -54,18 +39,27 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __interface (instance, list, dispatcher, props)
+		function __interface (instance, list, props)
 		{
 
-			let $total = list.length,
-				$pending = $total,
-				$completed = 0,
+			// PROPERTIES
+			// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-				$isParallel = props.isParallel,
-				$limit = props.limit,
-				$delay = props.delay,
-				$interval = props.interval;
+				list = [ ...list ];
 
+				let $events = Object.assign(dummy(), props.events),
+					$scope = props.scope,
+
+					$isParallel = props.isParallel,
+					$limit = props.limit,
+					$delay = props.delay,
+					$interval = props.interval,
+
+					$total = list.length,
+					$pending = $total,
+					$completed = 0;
+
+				
 
 			Object.defineProperties(instance,
 			{
@@ -74,18 +68,8 @@
 				// ─────────────────────────────────────────────────
 
 				
-					// PARALLEL LIMIT
-					// ·············································
-					
-						/*limit:
-						{
-							value: (value) =>
-							{
-								options.limit = (!isSeries && isInt(value)) ? value : 0;
+					/* name: { value: (value) => !!value } */
 
-								return instance;
-							}
-						}*/
 
 
 				// EXECUTION
@@ -96,7 +80,7 @@
 					{
 						value: () =>
 						{
-							dispatcher.send(Event.RUN);
+							__send($events, 'run');
 
 							if ($delay) {
 								delay(instance.exec, $delay);
@@ -142,7 +126,7 @@
 
 							$pending -= 1;
 
-							const done = (error = null) =>
+							const callback = (error = null) =>
 							{
 								$completed += 1;
 
@@ -160,8 +144,38 @@
 								}
 							};
 
+							Object.defineProperties(callback,
+							{
 
-							target.run(done);
+								done:
+								{
+									value: callback
+								},
+
+								set:
+								{
+									value: (prop, value) =>
+									{
+										if (isString(prop)) {
+											$scope[prop] = value;
+										}
+									}
+								},
+
+								get:
+								{
+									value: (prop) => 
+									{
+										if (isString(prop)) {
+											return $scope[prop];
+										}
+									}
+								}
+
+							});
+
+
+							target.run(callback, target.isList ? $scope : null);
 						}
 					},
 
@@ -174,9 +188,9 @@
 								throw log.error(error);//new Error ('callback error ' + error);
 							}
 
-							dispatcher.send(Event.END);
-							dispatcher.send(Event.DONE);
-							dispatcher.send(Event.COMPLETE);
+							__send($events, 'end');
+							__send($events, 'done');
+							__send($events, 'complete');
 						}
 					}
 
@@ -189,10 +203,27 @@
 
 
 
+//┐  UTILS
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+
+	//┐  TOTAL TASKS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		function __send (events, event, ...args)
+		{
+			!!events[event] && events[event].apply(null, args);
+		}
+
+
+
+
 //┐  EXPORTS
 //╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 //┘
 
-	export default CombaMill;
+	export default CombaRunner;
 
 

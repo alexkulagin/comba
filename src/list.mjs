@@ -1,7 +1,7 @@
 'use strict';
 
 
-//┐  COMBA
+//┐  COMBA LIST
 //╠──███████████████████████████████████████████████████████████████████████████
 //┘
 
@@ -11,18 +11,9 @@
 	//┘
 
 		import CombaTask from './task.mjs';
-		import CombaMill from './mill.mjs';
+		import CombaRunner from './runner.mjs';
 
-		import { dummy, toDecimal, hasKey, isInt, isFunction, isAsyncFunction, isArray, isObject, isPlain, log } from './utils.mjs';
-
-
-
-	//┐  EVENTS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		import Dispatcher from './event/dispatcher.mjs';
-		import Event from './event/events.mjs';
+		import { dummy, toDecimal, hasKey, isInt, isFunction, isAsyncFunction, isArray, isObject, isPlainObject, log } from './utils.mjs';
 
 
 
@@ -48,11 +39,11 @@
 //┘
 
 
-	function CombaList (tasks, isParallel = false)
+	function CombaList (tasks, isParallel)
 	{
 		// INSTANCE
 		
-		const instance = Object.setPrototypeOf(callback => instance.run(callback), ((!this || !(this instanceof CombaList)) ? dummy() : this));
+		const instance = Object.setPrototypeOf((callback, scope) => instance.run(callback, scope), ((!this || !(this instanceof CombaList)) ? dummy() : this));
 		instance.constructor = CombaList;
 
 
@@ -66,27 +57,46 @@
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
-		function __interface (instance, tasks, isParallel)
+		function __interface (instance, tasks, isParallel = false)
 		{
 
-			// options = (!!options && isObject(options)) ? { ...defaultOptions, ...options } : defaultOptions;
+			const
+				list = __make(tasks),
 
-			const list = __make(tasks);
-			const dispatcher = new Dispatcher();
-			const props = dummy();
+				$events = dummy();
+				$events.run = null;
+				$events.end = null;
+				$events.done = null;
+				$events.complete = null;
 
 
-			props.isParallel = isParallel;
-			props.limit = 0;
-			props.delay = 0;
-			props.interval = 0;
+			let	$isParallel = isParallel,
+				$limit = 0,
+				$delay = 0,
+				$interval = 0;
 
 
 			Object.defineProperties(instance,
 			{
 
+				// props = (!!props && isObject(props)) ? { ...defaultOptions, ...props } : defaultOptions;
+
 				// CHAINABLE METHODS
 				// ─────────────────────────────────────────────────
+
+				
+					// SCOPE OBJECT
+					// ·············································
+					
+						/*scope:
+						{
+							value: (target) =>
+							{
+								$scope = (!!target && isPlainObject(target)) ? target : $scope;
+
+								return instance;
+							}
+						},*/
 
 				
 					// PARALLEL LIMIT
@@ -96,7 +106,7 @@
 						{
 							value: (value) =>
 							{
-								props.limit = (isParallel && isInt(value)) ? value : props.limit;
+								$limit = ($isParallel && isInt(value)) ? value : $limit;
 
 								return instance;
 							}
@@ -110,7 +120,7 @@
 						{
 							value: (value) =>
 							{
-								props.delay = (isInt(value)) ? value : 0;
+								$delay = (isInt(value)) ? value : 0;
 
 								return instance;
 							}
@@ -124,7 +134,7 @@
 						{
 							value: (value) =>
 							{
-								props.interval = toDecimal(value);
+								$interval = toDecimal(value);
 
 								return instance;
 							}
@@ -170,8 +180,8 @@
 						{
 							value: (event, handler) =>
 							{
-								if (isFunction(handler)) {
-									dispatcher.on(event, handler);
+								if (!!event && !!handler && hasKey($events, event) && isFunction(handler)) {
+									$events[event] = handler;
 								}
 
 								return instance;
@@ -190,19 +200,19 @@
 						isList: { get: () => true },
 
 
-					// GET TASKS
+					// TASKS
 					// ·············································
 
 						tasks: { get: () => [ ...list ] },
 
 
-					// GET QUEUE LENGTH
+					// LIST LENGTH
 					// ·············································
 
 						length: { get: () => list.length },
 
 
-					// GET TOTAL TASKS
+					// TOTAL TASKS
 					// ·············································
 
 						total: { get: () => __total(list) },
@@ -216,7 +226,7 @@
 					// INTERNAL
 					// ·············································
 
-						_internal: { value: (ƒ) => ƒ(/*options, */list, instance, dispatcher) },
+						_internal: { value: (ƒ) => ƒ(/*options, */list, instance) },
 
 
 
@@ -225,13 +235,25 @@
 
 					run:
 					{
-						value: (onComplete) =>
+						value: (onComplete, scope = null) =>
 						{
-							if (isFunction(onComplete)) {
-								dispatcher.on(Event.COMPLETE, onComplete);
+							if (!!onComplete && isFunction(onComplete)) {
+								$events.complete = onComplete;
+
 							}
 
-							new CombaMill(list, dispatcher, props).run();
+							const props = dummy();
+
+							props.scope = (!!scope && isPlainObject(scope)) ? scope : dummy();
+
+							props.events = $events;
+
+							props.isParallel = $isParallel;
+							props.limit = $limit;
+							props.delay = $delay;
+							props.interval = $interval;
+
+							new CombaRunner(list, props).run();
 						}
 					}
 			});
@@ -243,7 +265,40 @@
 
 
 
-	//┐  LIST MAKER
+
+//┐  UTILS
+//╠──░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+//┘
+
+
+	//┐  TOTAL TASKS
+	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
+	//┘
+
+		function __total (list)
+		{
+			let total = 0;
+
+			if (list.length)
+			{
+				list.forEach(task =>
+				{
+					if (task.isTask) {
+						total += 1;
+					}
+
+					else if (task.isList) {
+						total += __total(task.tasks);
+					}
+				});
+			}
+
+			return total;
+		}
+
+
+
+	//┐  CREATE LIST
 	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
 	//┘
 
@@ -308,7 +363,7 @@
 			// EACH OBJECT KEYS
 			// ─────────────────────────────────────────────────
 
-				else if (isPlain(values))
+				else if (isPlainObject(values))
 				{
 					const keys = Object.keys(values);
 
@@ -322,34 +377,6 @@
 
 			return list;
 		};
-
-
-
-
-	//┐  GET TOTAL TASKS
-	//╠──⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙⁘⁙
-	//┘
-
-		function __total (list)
-		{
-			let total = 0;
-
-			if (list.length)
-			{
-				list.forEach(task =>
-				{
-					if (task.isTask) {
-						total += 1;
-					}
-
-					else if (task.isList) {
-						total += __total(task.tasks);
-					}
-				});
-			}
-
-			return total;
-		}
 
 
 

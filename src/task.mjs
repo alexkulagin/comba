@@ -54,7 +54,7 @@
 		// INSTANCE
 		// ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-			ctx.instance = Object.setPrototypeOf(done => ctx.instance.run(done), this);
+			ctx.instance = Object.setPrototypeOf(callback => ctx.instance.run(callback), this);
 			ctx.instance.constructor = CombaTask;
 
 
@@ -114,7 +114,7 @@
 
 			Object.defineProperty(instance, 'run',
 			{
-				value: (done) => ctx.target(done)
+				value: (callback) => ctx.target(callback)
 			});
 
 
